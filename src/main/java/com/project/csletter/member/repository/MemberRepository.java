@@ -7,5 +7,5 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     public Member findByKakaoEmail(String kakaoEmail);
 
-    public Member findById(String id);
+    public Member findByUserCode(String userCode);
 }

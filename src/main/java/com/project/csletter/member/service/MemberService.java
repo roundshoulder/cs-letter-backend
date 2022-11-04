@@ -127,7 +127,7 @@ public class MemberService {
                 .withSubject(member.getKakaoEmail())
                 .withExpiresAt(new Date(System.currentTimeMillis()+ JwtProperties.EXPIRATION_TIME))
 
-                .withClaim("id", member.getId())
+                .withClaim("id", member.getUserCode())
                 .withClaim("nickname", member.getKakaoNickname())
 
                 .sign(Algorithm.HMAC512(JwtProperties.SECRET));
