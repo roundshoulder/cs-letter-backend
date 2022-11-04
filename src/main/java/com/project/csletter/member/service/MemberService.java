@@ -38,6 +38,8 @@ public class MemberService {
     @Value("${spring.security.oauth2.client.registration.kakao.client-secret}")
     String client_secret;
 
+    String redirect_uri = "http://3.35.186.95:8080/oauth/token";
+
     public OAuthToken getAccessToken(String code) {
         RestTemplate rt = new RestTemplate();
 
@@ -47,7 +49,7 @@ public class MemberService {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "authorization_code");
         params.add("client_id", client_id);
-        params.add("redirect_uri", WEB_URL + "/auth");
+        params.add("redirect_uri", redirect_uri);
         params.add("code", code);
         params.add("client_secret", client_secret);
 
