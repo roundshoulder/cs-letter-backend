@@ -58,16 +58,3 @@ target
 .flattened-pom.xml
 secrets.yml
 .gradletasknamecache
-/build/classes/
-/build/generated/
-/build/reports/
-/build/resources/
-/build/tmp/
-/build/test-results/
-/build/bootJarMainClassName
-/build/bootRunMainClassName
-/.idea/
-/.gradle/
-/.gradle/7.5.1/
-/.gradle/buildOutputCleanup/
-/.gradle/vcs-1/
