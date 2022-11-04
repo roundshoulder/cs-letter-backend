@@ -35,8 +35,8 @@ public class MemberService {
     @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
     String client_id;
 
-    @Value("${spring.security.oauth2.client.registration.kakao.client-secret}")
-    String client_secret;
+//    @Value("${spring.security.oauth2.client.registration.kakao.client-secret}")
+//    String client_secret;
 
     @Value("${spring.security.oauth2.client.registration.kakao.redirect-uri}")
     String redirect_uri;
@@ -52,7 +52,7 @@ public class MemberService {
         params.add("client_id", client_id);
         params.add("redirect_uri", redirect_uri);
         params.add("code", code);
-        params.add("client_secret", client_secret);
+//        params.add("client_secret", client_secret);
 
         HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest =
                 new HttpEntity<>(params, headers);
