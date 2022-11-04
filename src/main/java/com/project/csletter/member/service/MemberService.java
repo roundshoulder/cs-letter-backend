@@ -30,7 +30,7 @@ import static com.project.csletter.global.config.SecurityConfig.WEB_URL;
 @RequiredArgsConstructor
 public class MemberService {
 
-    public MemberRepository memberRepository;
+    private final MemberRepository memberRepository;
 
     @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
     String client_id;
