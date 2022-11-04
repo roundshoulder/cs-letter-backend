@@ -1,8 +1,6 @@
 HELP.md
 .gradle
 !gradle/wrapper/gradle-wrapper.jar
-!**/src/main/**/build/
-!**/src/test/**/build/
 
 ### STS ###
 .apt_generated
@@ -22,8 +20,7 @@ bin/
 *.iml
 *.ipr
 out/
-!**/src/main/**/out/
-!**/src/test/**/out/
+
 
 ### NetBeans ###
 /nbproject/private/
@@ -51,8 +48,6 @@ MANIFEST.MF
 _site/
 activemq-data
 bin
-!/**/src/**/bin
-!/**/src/**/build
 dependency-reduced-pom.xml
 dump.rdb
 interpolated*.xml
@@ -73,3 +68,6 @@ secrets.yml
 /build/bootRunMainClassName
 /.idea/
 /.gradle/
+/.gradle/7.5.1/
+/.gradle/buildOutputCleanup/
+/.gradle/vcs-1/
