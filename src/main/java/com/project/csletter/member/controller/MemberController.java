@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 @RequiredArgsConstructor
 public class MemberController {
 
-    private MemberService memberService;
+    private final MemberService memberService;
 
     @GetMapping("/token")
     public ResponseEntity getLogin(@RequestParam("code") String code) {
