@@ -1,6 +1,32 @@
-jwt:
-  secret: 19482745659
-
 spring:
   datasource:
-    url:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://csletter-rds-instance.cit8luulctnj.ap-northeast-2.rds.amazonaws.com:3306/csletter_rds?useUnicode=true&character_set_server=utf8mb4&useSSL=false&serverTimezone=Asia/Seoul
+    username: admin
+    password: Fkdnsemtyfej1!
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.MySQL57Dialect
+
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            client-id: 0783b813a70dca04c38deada5d72e3f6
+            redirect-uri: http://3.35.186.95:8080/oauth2/kakao
+            authorization-grant-type: authorization_code
+            client-authentication-method: POST
+            client-name: Kakao
+            client-secret: 3FKqhXPoGoVIslpFTeUIwwpCRY8FBTYz
+            scope:
+              - profile_nickname
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
