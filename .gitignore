@@ -65,7 +65,11 @@ secrets.yml
 .gradletasknamecache
 /build/classes/
 /build/generated/
+/build/reports/
 /build/resources/
 /build/tmp/
+/build/test-results/
 /build/bootJarMainClassName
 /build/bootRunMainClassName
+/.idea/
+/.gradle/
