@@ -10,7 +10,6 @@ import com.project.csletter.member.domain.Member;
 import com.project.csletter.member.domain.OAuthToken;
 import com.project.csletter.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -24,7 +23,6 @@ import org.springframework.web.client.RestTemplate;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
-import static com.project.csletter.global.config.SecurityConfig.WEB_URL;
 
 @Service
 @RequiredArgsConstructor
@@ -139,7 +137,7 @@ public class MemberService {
 
     public Member getMember(HttpServletRequest request) {
 
-        Long id = (Long) request.getAttribute("id");
+        Long id = (Long) request.getAttribute("userCode");
 
         Member member = memberRepository.findById(id).orElseThrow();
 

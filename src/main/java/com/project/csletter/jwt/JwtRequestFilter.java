@@ -35,10 +35,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         String token = jwtHeader.replace(JwtProperties.TOKEN_PREFIX, "");
 
-        Long id = null;
+        Long userCode = null;
 
         try {
-            id = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build().verify(token)
+            userCode = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build().verify(token)
                     .getClaim("id").asLong();
 
         } catch (TokenExpiredException e) {
@@ -49,7 +49,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             request.setAttribute(JwtProperties.HEADER_STRING, "유효하지 않은 토큰입니다.");
         }
 
-        request.setAttribute("member_id", id);
+        request.setAttribute("userCode", userCode);
 
         filterChain.doFilter(request, response);
     }
