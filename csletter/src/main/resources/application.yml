@@ -1,6 +1,0 @@
-jwt:
-  secret: 19482745659
-
-spring:
-  datasource:
-    url:
