@@ -35,7 +35,7 @@ public class Member {
     private String userRole;
 
     @Column(name = "create_time")
-    @CreationTimestamp //(4)
+    @CreationTimestamp
     private Timestamp createTime;
 
     @Builder
