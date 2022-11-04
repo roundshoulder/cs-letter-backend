@@ -41,4 +41,10 @@ public class MemberController {
 
         return ResponseEntity.ok().body(member);
     }
+
+    @GetMapping("/hi")
+    public String hi() {
+        return "hi";
+    }
+
 }
