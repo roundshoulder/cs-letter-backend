@@ -44,7 +44,7 @@ public class MemberController {
 
     @GetMapping("/hi")
     public String hi() {
-        return "hidkdk";
+        return "hidkdkdd";
     }
 
 }
