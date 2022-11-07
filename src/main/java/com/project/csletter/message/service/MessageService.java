@@ -15,6 +15,7 @@ public class MessageService {
     public void write(MessageCreate messageCreate) {
         Message message = Message.builder()
                 .body(messageCreate.getBody())
+                .nickname(messageCreate.getNickname())
                 .build();
 
         messageRepository.save(message);
