@@ -18,6 +18,6 @@ public class MessageController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(value = "/message")
     public void message(@RequestBody MessageCreate messageCreate) {
-
+        messageService.write(messageCreate);
     }
 }
