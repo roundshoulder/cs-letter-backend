@@ -19,9 +19,12 @@ public class Message {
     @Column(nullable = false)
     private String body;
 
+    private String nickname;
+
     @Builder
-    public Message(String body) {
+    public Message(String body, String nickname) {
         this.body = body;
+        this.nickname = nickname;
     }
 
 
