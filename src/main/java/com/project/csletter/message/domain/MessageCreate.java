@@ -10,9 +10,12 @@ public class MessageCreate {
 
     private String body;
 
+    private String nickname;
+
     @Builder
-    public MessageCreate(String body) {
+    public MessageCreate(String body, String nickname) {
         this.body = body;
+        this.nickname = nickname;
     }
 
 }
