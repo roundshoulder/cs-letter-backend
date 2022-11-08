@@ -1,18 +1,20 @@
 package com.project.csletter.member.controller;
 
 import com.project.csletter.jwt.JwtProperties;
+import com.project.csletter.jwt.TokenRequestDto;
+import com.project.csletter.jwt.TokenResponseDto;
 import com.project.csletter.member.domain.Member;
+import com.project.csletter.member.domain.MemberResponse;
 import com.project.csletter.member.domain.OAuthToken;
 import com.project.csletter.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/oauth")
@@ -29,22 +31,27 @@ public class MemberController {
         String jwtToken = memberService.saveMemberAndGetToken(oAuthToken.getAccess_token());
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + jwtToken);
+        headers.add(JwtProperties.HEADER_STRING, jwtToken);
 
         return ResponseEntity.ok().headers(headers).body("success");
-    }
-
-    @GetMapping("/me")
-    public ResponseEntity<Object> getCurrentUser(HttpServletRequest request) {
-
-        Member member = memberService.getMember(request);
-
-        return ResponseEntity.ok().body(member);
     }
 
     @GetMapping("/hi")
     public String hi() {
         return "dohagod";
     }
+
+    @GetMapping("/me")
+    public ResponseEntity getMyInfo(HttpServletResponse response) throws Exception {
+        MemberResponse memberResponse = memberService.getMyInfo();
+        return new ResponseEntity(memberResponse, HttpStatus.OK);
+    }
+
+    @PostMapping("/reIssue")
+    public TokenResponseDto reIssue(@RequestBody TokenRequestDto tokenRequestDto){
+        TokenResponseDto tokenResponseDto = memberService.reIssue(tokenRequestDto);
+        return tokenResponseDto;
+    }
+
 
 }
