@@ -14,7 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MessageController {
 
-    private static final int PAGE_DEFAULT_SIZE = 11;
+    private static final int PAGE_DEFAULT_SIZE = 6;
     private final MessageService messageService;
 
     @ResponseStatus(HttpStatus.CREATED)
