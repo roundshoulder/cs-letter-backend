@@ -1,9 +1,6 @@
 package com.project.csletter.member.domain;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -13,6 +10,8 @@ import java.sql.Timestamp;
 @Getter
 @Setter
 @NoArgsConstructor
+@Builder
+@AllArgsConstructor
 public class Member {
 
     @Id
@@ -39,14 +38,11 @@ public class Member {
     @CreationTimestamp
     private Timestamp createTime;
 
-    @Builder
-    public Member(Long kakaoId, String kakaoProfileImg, String kakaoNickname,
-                String kakaoEmail, String userRole) {
+    @Column(length = 1000)
+    private String refreshToken;
 
-        this.kakaoId = kakaoId;
-        this.kakaoProfileImg = kakaoProfileImg;
-        this.kakaoNickname = kakaoNickname;
-        this.kakaoEmail = kakaoEmail;
-        this.userRole = userRole;
+
+    public void updateRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
     }
 }
