@@ -1,14 +1,13 @@
 package com.project.csletter.message.domain;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class Message {
 
     @Id
@@ -21,10 +20,13 @@ public class Message {
 
     private String nickname;
 
+    private Long toUserId;
+
     @Builder
-    public Message(String body, String nickname) {
+    public Message(String body, String nickname, Long toUserId) {
         this.body = body;
         this.nickname = nickname;
+        this.toUserId = toUserId;
     }
 
 
