@@ -4,12 +4,20 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.csletter.global.utils.SecurityUtil;
 import com.project.csletter.jwt.JwtProperties;
+import com.project.csletter.jwt.JwtService;
+import com.project.csletter.jwt.TokenRequestDto;
+import com.project.csletter.jwt.TokenResponseDto;
 import com.project.csletter.member.domain.KakaoProfile;
 import com.project.csletter.member.domain.Member;
+import com.project.csletter.member.domain.MemberResponse;
 import com.project.csletter.member.domain.OAuthToken;
+import com.project.csletter.member.exception.MemberException;
+import com.project.csletter.member.exception.MemberExceptionType;
 import com.project.csletter.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -26,9 +34,11 @@ import java.util.Date;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final JwtService jwtService;
 
     @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
     String client_id;
@@ -112,35 +122,43 @@ public class MemberService {
                     .kakaoProfileImg(profile.getKakao_account().getProfile().getProfile_image_url())
                     .kakaoNickname(profile.getKakao_account().getProfile().getNickname())
                     .kakaoEmail(profile.getKakao_account().getEmail())
-                    .userRole("ROLE_USER").build();
+                    .userRole("USER").build();
 
             memberRepository.save(member);
         }
 
-        return createToken(member);
+        member.updateRefreshToken(jwtService.createRefreshToken());
+        return jwtService.createAccessToken(member);
     }
 
-    public String createToken(Member member) {
+    public MemberResponse getMyInfo() {
 
-        String jwtToken = JWT.create()
+        Member member = memberRepository.findByKakaoNickname((SecurityUtil.getLoginUsername()))
+                .orElseThrow();
 
-                .withSubject(member.getKakaoEmail())
-                .withExpiresAt(new Date(System.currentTimeMillis()+ JwtProperties.EXPIRATION_TIME))
-
-                .withClaim("id", member.getUserCode())
-                .withClaim("nickname", member.getKakaoNickname())
-
-                .sign(Algorithm.HMAC512(JwtProperties.SECRET));
-
-        return jwtToken;
+        MemberResponse memberResponse = MemberResponse.builder()
+                .userCode(member.getUserCode())
+                .kakaoId(member.getKakaoId())
+                .kakaoProfileImg(member.getKakaoProfileImg())
+                .kakaoNickname(member.getKakaoNickname())
+                .kakaoEmail(member.getKakaoEmail())
+                .userRole(member.getUserRole())
+                .refreshToken(member.getRefreshToken())
+                .build();
+        return memberResponse;
     }
 
-    public Member getMember(HttpServletRequest request) {
 
-        Long id = (Long) request.getAttribute("userCode");
+    public TokenResponseDto reIssue(TokenRequestDto requestDto) {
+        if (!jwtService.isTokenValid(requestDto.getRefreshToken())) {
+            throw new MemberException(MemberExceptionType.TOKEN_INVALID);
+        }
 
-        Member member = memberRepository.findById(id).orElseThrow();
+        Member member = memberRepository.findByRefreshToken(requestDto.getRefreshToken()).orElseThrow();
 
-        return member;
+        String accessToken = jwtService.createAccessToken(member);
+        String refreshToken = jwtService.createRefreshToken();
+        member.updateRefreshToken(refreshToken);
+        return new TokenResponseDto(accessToken, refreshToken);
     }
 }
