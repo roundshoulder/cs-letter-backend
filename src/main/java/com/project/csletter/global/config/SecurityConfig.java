@@ -2,6 +2,7 @@ package com.project.csletter.global.config;
 
 import com.project.csletter.jwt.CustomAuthenticationEntryPoint;
 import com.project.csletter.jwt.JwtRequestFilter;
+import com.project.csletter.jwt.JwtService;
 import com.project.csletter.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +21,11 @@ import org.springframework.web.filter.CorsFilter;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    MemberRepository memberRepository;
-
     public static final String WEB_URL = "http://3.35.186.95:8080";
 
     private final CorsFilter corsFilter;
+    private final JwtService jwtService;
+    private final MemberRepository memberRepository;
 
     @Bean
     public BCryptPasswordEncoder encodePwd() {
@@ -52,6 +52,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling()
                 .authenticationEntryPoint(new CustomAuthenticationEntryPoint());
 
-        http.addFilterBefore(new JwtRequestFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtRequestFilter(), UsernamePasswordAuthenticationFilter.class);
+    }
+
+    @Bean
+    public JwtRequestFilter jwtRequestFilter() {
+        JwtRequestFilter jwtRequestFilter = new JwtRequestFilter(memberRepository, jwtService);
+        return jwtRequestFilter;
     }
 }
