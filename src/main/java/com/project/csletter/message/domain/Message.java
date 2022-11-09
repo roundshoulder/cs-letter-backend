@@ -20,13 +20,13 @@ public class Message {
 
     private String nickname;
 
-    private Long toUserId;
+    private Long toUserCode;
 
     @Builder
-    public Message(String body, String nickname, Long toUserId) {
+    public Message(String body, String nickname, Long toUserCode) {
         this.body = body;
         this.nickname = nickname;
-        this.toUserId = toUserId;
+        this.toUserCode = toUserCode;
     }
 
 
