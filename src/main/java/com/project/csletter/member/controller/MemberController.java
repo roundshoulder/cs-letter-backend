@@ -37,7 +37,7 @@ public class MemberController {
 
         Long userCode = memberService.getUserCodeByToken(oAuthToken.getAccess_token());
 
-        return ResponseEntity.ok().headers(headers).body("success " + userCode);
+        return ResponseEntity.ok().headers(headers).body(userCode);
     }
 
     @GetMapping("/hi")
