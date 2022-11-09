@@ -34,9 +34,18 @@ public class MessageService {
     public String initialList(String body) {
         char[] result = body.toCharArray();
 
+        char[] chs = {
+                'ㄱ', 'ㄲ', 'ㄴ', 'ㄷ', 'ㄸ',
+                'ㄹ', 'ㅁ', 'ㅂ', 'ㅃ', 'ㅅ',
+                'ㅆ', 'ㅇ', 'ㅈ', 'ㅉ', 'ㅊ',
+                'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ'
+        };
+
         for(int i = 0; i < result.length; i++) {
             if(result[i] >= '\uAC00' && result[i] <= '\uD7A3') {
-                result[i] = (char)(((result[i] - 0xAC00)/28)/21);
+                int tmp = result[i] - 0xAC00;
+                int c = ((tmp - (tmp%28))/28)/21;
+                result[i] = chs[c];
             }
         }
 
