@@ -51,9 +51,9 @@ public class MemberController {
         return new ResponseEntity(memberResponse, HttpStatus.OK);
     }
 
-    @GetMapping("/member/{memberId}")
-    public ResponseEntity getMember(@PathVariable Long memberId) {
-        MemberProfile memberProfile = memberService.getMemberInfo(memberId);
+    @GetMapping("/member/{memberToken}")
+    public ResponseEntity getMember(@PathVariable String memberToken) {
+        MemberProfile memberProfile = memberService.getMemberInfo(memberToken);
         return new ResponseEntity(memberProfile, HttpStatus.OK);
     }
 
