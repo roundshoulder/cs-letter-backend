@@ -10,14 +10,14 @@ public class MessageCreate {
 
     private String body;
     private String nickname;
-    private Long toUserId;
+    private Long toUserCode;
 
 
     @Builder
-    public MessageCreate(String body, String nickname, Long toUserId) {
+    public MessageCreate(String body, String nickname, Long toUserCode) {
         this.body = body;
         this.nickname = nickname;
-        this.toUserId = toUserId;
+        this.toUserCode = toUserCode;
     }
 
 }
