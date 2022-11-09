@@ -154,12 +154,19 @@ public class MemberService {
 
         MemberProfile memberProfile = MemberProfile.builder()
                 .userCode(member.getUserCode())
-                .isMe(member.getKakaoNickname() == SecurityUtil.getLoginUsername())
                 .kakaoProfileImg(member.getKakaoProfileImg())
                 .kakaoNickname(member.getKakaoNickname())
                 .kakaoEmail(member.getKakaoEmail())
                 .userRole(member.getUserRole())
                 .build();
+
+        try {
+            String name = SecurityUtil.getLoginUsername();
+            memberProfile.setIsMe(name.equals(member.getKakaoNickname()));
+        }catch (ClassCastException e) {
+            memberProfile.setIsMe(false);
+        }
+
         return memberProfile;
     }
 
