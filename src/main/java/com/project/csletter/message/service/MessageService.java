@@ -25,7 +25,7 @@ public class MessageService {
         Message message = Message.builder()
                 .body(messageCreate.getBody())
                 .nickname(messageCreate.getNickname())
-                .toUserId(messageCreate.getToUserId())
+                .toUserCode(messageCreate.getToUserCode())
                 .build();
 
         messageRepository.save(message);
