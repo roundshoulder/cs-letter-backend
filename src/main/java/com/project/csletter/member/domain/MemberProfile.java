@@ -23,4 +23,6 @@ public class MemberProfile {
 
     private Boolean isMe;
 
+    private String memberToken;
+
 }
