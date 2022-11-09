@@ -9,10 +9,10 @@ import java.util.List;
 
 public interface MessageRepository extends JpaRepository<Message, Long> {
 
-    @Query(value = "SELECT * FROM message WHERE to_user_code = :sessionId ORDER BY message_id DESC", nativeQuery = true)
+    @Query(value = "SELECT * FROM message WHERE to_member_token = :sessionId ORDER BY message_id DESC", nativeQuery = true)
     List<Message> mainFeed(long sessionId, Pageable pageable);
 
-    @Query(value = "SELECT * FROM message WHERE to_user_code = :sessionId AND message_id < :id ORDER BY message_id DESC", nativeQuery = true)
+    @Query(value = "SELECT * FROM message WHERE to_member_token = :sessionId AND message_id < :id ORDER BY message_id DESC", nativeQuery = true)
     List<Message> mainFeedLess(long sessionId, Long id, Pageable pageable);
 
 }
