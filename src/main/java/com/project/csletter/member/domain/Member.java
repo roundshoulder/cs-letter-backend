@@ -41,6 +41,8 @@ public class Member {
     @Column(length = 1000)
     private String refreshToken;
 
+    @Column(name = "member_token")
+    private String memberToken;
 
     public void updateRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
