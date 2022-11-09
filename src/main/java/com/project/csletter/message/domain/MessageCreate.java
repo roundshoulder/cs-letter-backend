@@ -10,14 +10,14 @@ public class MessageCreate {
 
     private String body;
     private String nickname;
-    private Long toUserCode;
+    private String toMemberToken;
 
 
     @Builder
-    public MessageCreate(String body, String nickname, Long toUserCode) {
+    public MessageCreate(String body, String nickname, String toMemberToken) {
         this.body = body;
         this.nickname = nickname;
-        this.toUserCode = toUserCode;
+        this.toMemberToken = toMemberToken;
     }
 
 }
