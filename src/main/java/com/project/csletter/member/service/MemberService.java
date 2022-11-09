@@ -123,6 +123,13 @@ public class MemberService {
         return jwtService.createAccessToken(member);
     }
 
+    public Long getUserCodeByToken(String token) {
+        KakaoProfile profile = findProfile(token);
+        Member member = memberRepository.findByKakaoEmail(profile.getKakao_account().getEmail());
+
+        return member.getUserCode();
+    }
+
     public MemberResponse getMyInfo() {
 
         Member member = memberRepository.findByKakaoNickname((SecurityUtil.getLoginUsername()))
