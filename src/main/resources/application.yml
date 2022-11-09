@@ -17,7 +17,7 @@ spring:
         registration:
           kakao:
             client-id: 12e53c031e79b63b32a7f4d5ee1fbcf2
-            redirect-uri: https://roundshoulder.github.io/cs-letter-frontend/ouath/kakao
+            redirect-uri: https://roundshoulder.github.io/cs-letter-frontend/ouath/callback/kakao
             authorization-grant-type: authorization_code
             client-authentication-method: POST
             client-name: Kakao
