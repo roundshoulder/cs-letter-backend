@@ -35,9 +35,9 @@ public class MemberController {
         HttpHeaders headers = new HttpHeaders();
         headers.add(JwtProperties.HEADER_STRING, jwtToken);
 
-        Member member = memberRepository.findByKakaoNickname(SecurityUtil.getLoginUsername()).orElseThrow();
+        Long userCode = memberService.getUserCodeByToken(oAuthToken.getAccess_token());
 
-        return ResponseEntity.ok().headers(headers).body("success" + member.getUserCode());
+        return ResponseEntity.ok().headers(headers).body("success " + userCode);
     }
 
     @GetMapping("/hi")
