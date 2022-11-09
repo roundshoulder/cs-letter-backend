@@ -22,6 +22,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Random;
 
 
 @Service
@@ -114,6 +115,7 @@ public class MemberService {
                     .kakaoProfileImg(profile.getKakao_account().getProfile().getProfile_image_url())
                     .kakaoNickname(profile.getKakao_account().getProfile().getNickname())
                     .kakaoEmail(profile.getKakao_account().getEmail())
+                    .memberToken(createMemberToken())
                     .userRole("USER").build();
 
             memberRepository.save(member);
@@ -143,13 +145,14 @@ public class MemberService {
                 .kakaoEmail(member.getKakaoEmail())
                 .userRole(member.getUserRole())
                 .refreshToken(member.getRefreshToken())
+                .memberToken(member.getMemberToken())
                 .build();
         return memberResponse;
     }
 
-    public MemberProfile getMemberInfo(Long memberId) {
+    public MemberProfile getMemberInfo(String memberToken) {
 
-        Member member = memberRepository.findByUserCode(memberId)
+        Member member = memberRepository.findByMemberToken(memberToken)
                 .orElseThrow();
 
         MemberProfile memberProfile = MemberProfile.builder()
@@ -158,6 +161,7 @@ public class MemberService {
                 .kakaoNickname(member.getKakaoNickname())
                 .kakaoEmail(member.getKakaoEmail())
                 .userRole(member.getUserRole())
+                .memberToken(member.getMemberToken())
                 .build();
 
         try {
@@ -170,7 +174,6 @@ public class MemberService {
         return memberProfile;
     }
 
-
     public TokenResponseDto reIssue(TokenRequestDto requestDto) {
         if (!jwtService.isTokenValid(requestDto.getRefreshToken())) {
             throw new MemberException(MemberExceptionType.TOKEN_INVALID);
@@ -182,5 +185,29 @@ public class MemberService {
         String refreshToken = jwtService.createRefreshToken();
         member.updateRefreshToken(refreshToken);
         return new TokenResponseDto(accessToken, refreshToken);
+    }
+
+    public String createMemberToken() {
+        Random random = new Random();
+        int length = random.nextInt(5)+5;
+
+        StringBuffer newWord = new StringBuffer();
+        for (int i = 0; i < length; i++) {
+            int choice = random.nextInt(3);
+            switch(choice) {
+                case 0:
+                    newWord.append((char)((int)random.nextInt(25)+97));
+                    break;
+                case 1:
+                    newWord.append((char)((int)random.nextInt(25)+65));
+                    break;
+                case 2:
+                    newWord.append((char)((int)random.nextInt(10)+48));
+                    break;
+                default:
+                    break;
+            }
+        }
+        return newWord.toString();
     }
 }
