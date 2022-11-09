@@ -1,18 +1,12 @@
 package com.project.csletter.member.service;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.csletter.global.utils.SecurityUtil;
-import com.project.csletter.jwt.JwtProperties;
 import com.project.csletter.jwt.JwtService;
 import com.project.csletter.jwt.TokenRequestDto;
 import com.project.csletter.jwt.TokenResponseDto;
-import com.project.csletter.member.domain.KakaoProfile;
-import com.project.csletter.member.domain.Member;
-import com.project.csletter.member.domain.MemberResponse;
-import com.project.csletter.member.domain.OAuthToken;
+import com.project.csletter.member.domain.*;
 import com.project.csletter.member.exception.MemberException;
 import com.project.csletter.member.exception.MemberExceptionType;
 import com.project.csletter.member.repository.MemberRepository;
@@ -28,8 +22,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
 
 
 @Service
@@ -146,6 +138,22 @@ public class MemberService {
                 .refreshToken(member.getRefreshToken())
                 .build();
         return memberResponse;
+    }
+
+    public MemberProfile getMemberInfo(Long memberId) {
+
+        Member member = memberRepository.findByUserCode(memberId)
+                .orElseThrow();
+
+        MemberProfile memberProfile = MemberProfile.builder()
+                .userCode(member.getUserCode())
+                .isMe(member.getKakaoNickname() == SecurityUtil.getLoginUsername())
+                .kakaoProfileImg(member.getKakaoProfileImg())
+                .kakaoNickname(member.getKakaoNickname())
+                .kakaoEmail(member.getKakaoEmail())
+                .userRole(member.getUserRole())
+                .build();
+        return memberProfile;
     }
 
 
