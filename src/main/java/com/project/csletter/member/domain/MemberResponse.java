@@ -24,4 +24,6 @@ public class MemberResponse {
     private String userRole;
 
     private String refreshToken;
+
+    private String memberToken;
 }
