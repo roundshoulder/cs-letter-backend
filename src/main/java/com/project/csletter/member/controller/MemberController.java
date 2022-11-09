@@ -3,7 +3,7 @@ package com.project.csletter.member.controller;
 import com.project.csletter.jwt.JwtProperties;
 import com.project.csletter.jwt.TokenRequestDto;
 import com.project.csletter.jwt.TokenResponseDto;
-import com.project.csletter.member.domain.Member;
+import com.project.csletter.member.domain.MemberProfile;
 import com.project.csletter.member.domain.MemberResponse;
 import com.project.csletter.member.domain.OAuthToken;
 import com.project.csletter.member.service.MemberService;
@@ -13,17 +13,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
-@RequestMapping("/oauth")
 @RequiredArgsConstructor
 public class MemberController {
 
     private final MemberService memberService;
 
-    @GetMapping("/token")
+    @GetMapping("/oauth/token")
     public ResponseEntity getLogin(@RequestParam("code") String code) {
 
         OAuthToken oAuthToken = memberService.getAccessToken(code);
@@ -41,10 +39,16 @@ public class MemberController {
         return "dohagod";
     }
 
-    @GetMapping("/me")
+    @GetMapping("/oauth/me")
     public ResponseEntity getMyInfo(HttpServletResponse response) throws Exception {
         MemberResponse memberResponse = memberService.getMyInfo();
         return new ResponseEntity(memberResponse, HttpStatus.OK);
+    }
+
+    @GetMapping("/member/{memberId}")
+    public ResponseEntity getMember(@PathVariable Long memberId) {
+        MemberProfile memberProfile = memberService.getMemberInfo(memberId);
+        return new ResponseEntity(memberProfile, HttpStatus.OK);
     }
 
     @PostMapping("/reIssue")
