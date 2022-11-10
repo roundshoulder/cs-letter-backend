@@ -5,6 +5,7 @@ import com.project.csletter.member.domain.Member;
 import com.project.csletter.member.repository.MemberRepository;
 import com.project.csletter.message.domain.Message;
 import com.project.csletter.message.domain.MessageCreate;
+import com.project.csletter.message.domain.MessageListResponse;
 import com.project.csletter.message.domain.MessageResponse;
 import com.project.csletter.message.repository.MessageRepository;
 import lombok.RequiredArgsConstructor;
@@ -53,13 +54,16 @@ public class MessageService {
         return String.valueOf(result);
     }
 
-    public List<MessageResponse> getMessageFeed(Long cursor, Pageable pageable, String memberToken) {
-        List<MessageResponse> mainList = getMessageList(cursor, pageable, memberToken)
+    public List<MessageListResponse> getMessageFeed(Long cursor, Pageable pageable, String memberToken) {
+        List<MessageListResponse> mainList = getMessageList(cursor, pageable, memberToken)
                 .stream()
-                .map(MessageResponse::new)
+                .map(MessageListResponse::new)
                 .collect(Collectors.toList());
 
-        mainList.forEach( f -> f.setBody(initialList(f.getBody())));
+        mainList.forEach( f -> {
+            f.setBody(initialList(f.getBody()));
+            f.setHaveNextMessage(!messageRepository.mainFeedLess(memberToken, f.getMessageId(), pageable).isEmpty());
+        });
 
         return mainList;
     }
