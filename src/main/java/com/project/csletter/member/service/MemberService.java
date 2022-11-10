@@ -125,11 +125,11 @@ public class MemberService {
         return jwtService.createAccessToken(member);
     }
 
-    public Long getUserCodeByToken(String token) {
+    public String getMemberTokenByToken(String token) {
         KakaoProfile profile = findProfile(token);
         Member member = memberRepository.findByKakaoEmail(profile.getKakao_account().getEmail());
 
-        return member.getUserCode();
+        return member.getMemberToken();
     }
 
     public MemberResponse getMyInfo() {
