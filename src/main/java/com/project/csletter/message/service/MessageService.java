@@ -53,9 +53,8 @@ public class MessageService {
         return String.valueOf(result);
     }
 
-    public List<MessageResponse> getMessageFeed(Long cursor, Pageable pageable) {
-        Member member = memberRepository.findByKakaoNickname(SecurityUtil.getLoginUsername()).orElseThrow();
-        List<MessageResponse> mainList = getMessageList(cursor, pageable)
+    public List<MessageResponse> getMessageFeed(Long cursor, Pageable pageable, String memberToken) {
+        List<MessageResponse> mainList = getMessageList(cursor, pageable, memberToken)
                 .stream()
                 .map(MessageResponse::new)
                 .collect(Collectors.toList());
@@ -65,11 +64,10 @@ public class MessageService {
         return mainList;
     }
 
-    private List<Message> getMessageList(Long id, Pageable page) {
-        Member member = memberRepository.findByKakaoNickname(SecurityUtil.getLoginUsername()).orElseThrow();
+    private List<Message> getMessageList(Long id, Pageable page, String memberToken) {
         return id.equals(0L)
-                ? messageRepository.mainFeed(member.getMemberToken(), page)
-                : messageRepository.mainFeedLess(member.getMemberToken(), id, page);
+                ? messageRepository.mainFeed(memberToken, page)
+                : messageRepository.mainFeedLess(memberToken, id, page);
     }
 
 
