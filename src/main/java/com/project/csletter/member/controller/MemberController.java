@@ -27,18 +27,18 @@ public class MemberController {
         OAuthToken oAuthToken = memberService.getAccessToken(code);
 
         String jwtToken = memberService.saveMemberAndGetToken(oAuthToken.getAccess_token());
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(JwtProperties.HEADER_STRING, jwtToken);
-
+        
         String memberToken = memberService.getMemberTokenByToken(oAuthToken.getAccess_token());
 
         Member member = memberRepository.findByMemberToken(memberToken).orElseThrow();
 
         MemberLoginResponse memberLoginResponse = MemberLoginResponse.builder()
                 .memberToken(memberToken)
-                .refreshToken(member.getRefreshToken())
                 .build();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("AccessToken", jwtToken);
+        headers.add("RefreshToken", member.getRefreshToken());
 
         return ResponseEntity.ok().headers(headers).body(memberLoginResponse);
     }
