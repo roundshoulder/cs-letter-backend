@@ -23,9 +23,9 @@ public class MessageController {
         messageService.write(messageCreate);
     }
 
-    @GetMapping("/message")
-    public List<MessageResponse> getMessageList(Long cursor) {
-        return messageService.getMessageFeed(cursor, PageRequest.of(0, PAGE_DEFAULT_SIZE));
+    @GetMapping("/messages/{memberToken}")
+    public List<MessageResponse> getMessageList(@RequestParam("cursor") Long cursor, @PathVariable String memberToken) {
+        return messageService.getMessageFeed(cursor, PageRequest.of(0, PAGE_DEFAULT_SIZE), memberToken);
     }
 
     @GetMapping("/message/{messageId}")
