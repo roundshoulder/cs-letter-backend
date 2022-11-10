@@ -3,9 +3,11 @@ package com.project.csletter.member.controller;
 import com.project.csletter.jwt.JwtProperties;
 import com.project.csletter.jwt.TokenRequestDto;
 import com.project.csletter.jwt.TokenResponseDto;
+import com.project.csletter.member.domain.Member;
 import com.project.csletter.member.domain.MemberProfile;
 import com.project.csletter.member.domain.MemberResponse;
 import com.project.csletter.member.domain.OAuthToken;
+import com.project.csletter.member.repository.MemberRepository;
 import com.project.csletter.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -20,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 public class MemberController {
 
     private final MemberService memberService;
+    private final MemberRepository memberRepository;
 
     @GetMapping("/oauth/token")
     public ResponseEntity getLogin(@RequestParam("code") String code) {
@@ -33,7 +36,9 @@ public class MemberController {
 
         String memberToken = memberService.getMemberTokenByToken(oAuthToken.getAccess_token());
 
-        return ResponseEntity.ok().headers(headers).body(memberToken);
+        Member member = memberRepository.findByMemberToken(memberToken).orElseThrow();
+
+        return ResponseEntity.ok().headers(headers).body(memberToken + "\n" + member.getRefreshToken());
     }
 
     @GetMapping("/hi")
