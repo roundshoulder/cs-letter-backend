@@ -11,5 +11,4 @@ import lombok.*;
 public class MemberLoginResponse {
 
     private String memberToken;
-    private String refreshToken;
 }
