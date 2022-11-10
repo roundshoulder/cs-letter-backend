@@ -1,6 +1,7 @@
 package com.project.csletter.message.controller;
 
 import com.project.csletter.message.domain.MessageCreate;
+import com.project.csletter.message.domain.MessageListResponse;
 import com.project.csletter.message.domain.MessageResponse;
 import com.project.csletter.message.service.MessageService;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,7 @@ public class MessageController {
     }
 
     @GetMapping("/messages/{memberToken}")
-    public List<MessageResponse> getMessageList(@RequestParam("cursor") Long cursor, @PathVariable String memberToken) {
+    public List<MessageListResponse> getMessageList(@RequestParam("cursor") Long cursor, @PathVariable String memberToken) {
         return messageService.getMessageFeed(cursor, PageRequest.of(0, PAGE_DEFAULT_SIZE), memberToken);
     }
 
