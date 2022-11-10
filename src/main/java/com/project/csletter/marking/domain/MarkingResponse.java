@@ -10,5 +10,6 @@ import lombok.*;
 @Builder
 public class MarkingResponse {
     private Boolean[] result;
+    private Long count;
     private Long totalCount;
 }
