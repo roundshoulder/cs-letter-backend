@@ -27,7 +27,7 @@ public class MemberController {
         OAuthToken oAuthToken = memberService.getAccessToken(code);
 
         String jwtToken = memberService.saveMemberAndGetToken(oAuthToken.getAccess_token());
-        
+
         String memberToken = memberService.getMemberTokenByToken(oAuthToken.getAccess_token());
 
         Member member = memberRepository.findByMemberToken(memberToken).orElseThrow();
