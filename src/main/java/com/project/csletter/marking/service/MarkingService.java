@@ -43,17 +43,18 @@ public class MarkingService {
 
     public MarkingResponse getResult(MarkingCreate markingCreate, Message message, Boolean[] result) {
 
+        Marking marking = markingRepository.findByMessageId(markingCreate.getMessageId()).orElseThrow();
+
         for(int i = 0; i < message.getBody().length(); i++) {
             if(message.getBody().charAt(i) >= '\uAC00' && message.getBody().charAt(i) <= '\uD7A3') {
                 result[i] = markingCreate.getBody().charAt(i) == message.getBody().charAt(i);
             }
         }
 
-        MarkingResponse markingResponse = MarkingResponse.builder()
+        return MarkingResponse.builder()
                 .result(result)
-                .totalCount(markingRepository.findByMessageId(markingCreate.getMessageId()).orElseThrow().getTotalCount())
+                .count(marking.getCount())
+                .totalCount(marking.getTotalCount())
                 .build();
-
-        return markingResponse;
     }
 }
