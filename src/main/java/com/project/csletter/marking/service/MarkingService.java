@@ -18,7 +18,7 @@ public class MarkingService {
 
     @Transactional
     public void marking(MarkingCreate markingCreate) {
-        if(markingRepository.findByMessageId(markingCreate.getMessageId()).orElseThrow() == null) {
+        if(markingRepository.findByMessageId(markingCreate.getMessageId()).isEmpty()) {
             Marking marking = Marking.builder()
                     .body(markingCreate.getBody())
                     .messageId(markingCreate.getMessageId())
