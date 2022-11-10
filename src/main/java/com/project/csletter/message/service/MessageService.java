@@ -26,6 +26,7 @@ public class MessageService {
                 .body(messageCreate.getBody())
                 .nickname(messageCreate.getNickname())
                 .toMemberToken(messageCreate.getToMemberToken())
+                .color(messageCreate.getColor())
                 .build();
 
         messageRepository.save(message);
@@ -59,14 +60,16 @@ public class MessageService {
                 .map(MessageResponse::new)
                 .collect(Collectors.toList());
 
+        mainList.forEach( f -> f.setBody(initialList(f.getBody())));
+
         return mainList;
     }
 
     private List<Message> getMessageList(Long id, Pageable page) {
         Member member = memberRepository.findByKakaoNickname(SecurityUtil.getLoginUsername()).orElseThrow();
         return id.equals(0L)
-                ? messageRepository.mainFeed(member.getUserCode(), page)
-                : messageRepository.mainFeedLess(member.getUserCode(), id, page);
+                ? messageRepository.mainFeed(member.getMemberToken(), page)
+                : messageRepository.mainFeedLess(member.getMemberToken(), id, page);
     }
 
 
