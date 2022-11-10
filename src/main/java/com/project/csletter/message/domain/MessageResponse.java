@@ -9,6 +9,7 @@ public class MessageResponse {
     private String body;
     private String nickname;
     private String toMemberToken;
+    private Long color;
 
     @Builder
     public MessageResponse(Message message) {
@@ -16,6 +17,7 @@ public class MessageResponse {
         this.body = message.getBody();
         this.nickname = message.getNickname();
         this.toMemberToken = message.getToMemberToken();
+        this.color = message.getColor();
     }
 
 }
