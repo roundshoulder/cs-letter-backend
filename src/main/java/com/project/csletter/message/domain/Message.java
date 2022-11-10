@@ -1,5 +1,6 @@
 package com.project.csletter.message.domain;
 
+import com.project.csletter.global.BaseTimeEntity;
 import lombok.*;
 
 import javax.persistence.*;
@@ -8,7 +9,7 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @AllArgsConstructor
-public class Message {
+public class Message extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,11 +23,14 @@ public class Message {
 
     private String toMemberToken;
 
+    private Long color;
+
     @Builder
-    public Message(String body, String nickname, String toMemberToken) {
+    public Message(String body, String nickname, String toMemberToken, Long color) {
         this.body = body;
         this.nickname = nickname;
         this.toMemberToken = toMemberToken;
+        this.color = color;
     }
 
 
