@@ -29,8 +29,6 @@ public class MarkingController {
 
         Boolean[] result = new Boolean[message.getBody().length()];;
 
-        MarkingResponse markingResponse = markingService.getResult(markingCreate, message, result);
-
-        return markingResponse;
+        return markingService.getResult(markingCreate, message, result);
     }
 }
