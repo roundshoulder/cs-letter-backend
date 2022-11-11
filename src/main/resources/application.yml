@@ -42,3 +42,8 @@ jwt:
   refresh:
     expiration: 1209600
     header: Authorization-refresh
+
+server:
+  error:
+    include-exception: true
+    include-message: always
