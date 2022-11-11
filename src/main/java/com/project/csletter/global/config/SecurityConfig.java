@@ -1,6 +1,7 @@
 package com.project.csletter.global.config;
 
 import com.project.csletter.jwt.CustomAuthenticationEntryPoint;
+import com.project.csletter.jwt.JwtExceptionFilter;
 import com.project.csletter.jwt.JwtRequestFilter;
 import com.project.csletter.jwt.JwtService;
 import com.project.csletter.member.repository.MemberRepository;
@@ -25,6 +26,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final CorsFilter corsFilter;
     private final JwtService jwtService;
     private final MemberRepository memberRepository;
+    private final JwtExceptionFilter jwtExceptionFilter;
 
     @Bean
     public BCryptPasswordEncoder encodePwd() {
@@ -52,6 +54,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(new CustomAuthenticationEntryPoint());
 
         http.addFilterBefore(jwtRequestFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtExceptionFilter, JwtRequestFilter.class);
     }
 
     @Bean
