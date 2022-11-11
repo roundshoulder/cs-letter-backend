@@ -16,6 +16,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.filter.CorsFilter;
 
+import javax.servlet.Filter;
+
 @Configuration
 @RequiredArgsConstructor
 @EnableWebSecurity
@@ -26,7 +28,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final CorsFilter corsFilter;
     private final JwtService jwtService;
     private final MemberRepository memberRepository;
-    private final JwtExceptionFilter jwtExceptionFilter;
 
     @Bean
     public BCryptPasswordEncoder encodePwd() {
@@ -54,7 +55,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(new CustomAuthenticationEntryPoint());
 
         http.addFilterBefore(jwtRequestFilter(), UsernamePasswordAuthenticationFilter.class);
-        http.addFilterBefore(jwtExceptionFilter, JwtRequestFilter.class);
+        http.addFilterBefore(jwtExceptionFilter(), JwtRequestFilter.class);
+    }
+
+    @Bean
+    public JwtExceptionFilter jwtExceptionFilter() {
+        JwtExceptionFilter jwtExceptionFilter = new JwtExceptionFilter();
+        return jwtExceptionFilter;
     }
 
     @Bean
