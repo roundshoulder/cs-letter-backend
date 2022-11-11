@@ -23,7 +23,7 @@ import javax.servlet.Filter;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    public static final String WEB_URL = "http://3.35.186.95:8080";
+    public static final String WEB_URL = "https://api.chosung-letter.com";
 
     private final CorsFilter corsFilter;
     private final JwtService jwtService;
