@@ -1,6 +1,8 @@
 package com.project.csletter.jwt;
 
 import com.project.csletter.member.domain.Member;
+import com.project.csletter.member.exception.MemberException;
+import com.project.csletter.member.exception.MemberExceptionType;
 import com.project.csletter.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
