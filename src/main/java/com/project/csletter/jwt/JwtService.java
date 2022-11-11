@@ -2,6 +2,7 @@ package com.project.csletter.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.project.csletter.member.domain.Member;
 import com.project.csletter.member.exception.MemberException;
 import com.project.csletter.member.exception.MemberExceptionType;
@@ -128,7 +129,7 @@ public class JwtService {
         try {
             JWT.require(Algorithm.HMAC512(secret)).build().verify(token);
             return true;
-        }catch (MemberException e) {
+        }catch (Exception e) {
             throw new MemberException(MemberExceptionType.TOKEN_INVALID);
         }
     }
