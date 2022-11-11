@@ -26,6 +26,7 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.ServletException;
 import java.rmi.ServerError;
+import java.util.Optional;
 import java.util.Random;
 
 
@@ -112,8 +113,8 @@ public class MemberService {
     public String saveMemberAndGetToken(String token) {
         KakaoProfile profile = findProfile(token);
 
-        Member member = memberRepository.findByKakaoNickname(profile.getProperties().getNickname()).orElseThrow();
-        if(member == null) {
+        if(memberRepository.findByKakaoNickname(profile.getProperties().getNickname()).isEmpty()) {
+            Member member = memberRepository.findByKakaoNickname(profile.getProperties().getNickname()).orElseThrow();
             member = Member.builder()
                     .kakaoId(profile.getId())
                     .kakaoProfileImg(profile.getKakao_account().getProfile().getProfile_image_url())
@@ -123,10 +124,14 @@ public class MemberService {
                     .userRole("USER").build();
 
             memberRepository.save(member);
+            member.updateRefreshToken(jwtService.createRefreshToken());
+            return jwtService.createAccessToken(member);
+        }else {
+            Member member = memberRepository.findByKakaoNickname(profile.getProperties().getNickname()).orElseThrow();
+            member.updateRefreshToken(jwtService.createRefreshToken());
+            return jwtService.createAccessToken(member);
         }
 
-        member.updateRefreshToken(jwtService.createRefreshToken());
-        return jwtService.createAccessToken(member);
     }
 
     public String getMemberTokenByToken(String token) {
