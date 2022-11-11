@@ -2,6 +2,8 @@ package com.project.csletter.message.service;
 
 import com.project.csletter.global.utils.SecurityUtil;
 import com.project.csletter.member.domain.Member;
+import com.project.csletter.member.exception.MemberException;
+import com.project.csletter.member.exception.MemberExceptionType;
 import com.project.csletter.member.repository.MemberRepository;
 import com.project.csletter.message.domain.Message;
 import com.project.csletter.message.domain.MessageCreate;
@@ -76,12 +78,21 @@ public class MessageService {
 
 
     public MessageResponse getMessage(Long messageId) {
+
+        Member member = memberRepository.findByKakaoNickname((SecurityUtil.getLoginUsername()))
+                .orElseThrow();
+
         Message message = messageRepository.findById(messageId).orElseThrow();
 
-        MessageResponse result = new MessageResponse(message);
 
-        result.setBody(initialList(result.getBody()));
+        if(message.getToMemberToken().equals(member.getMemberToken())) {
+            MessageResponse result = new MessageResponse(message);
 
-        return result;
+            result.setBody(initialList(result.getBody()));
+
+            return result;
+        } else {
+            throw new MemberException(MemberExceptionType.TOKEN_INVALID);
+        }
     }
 }
