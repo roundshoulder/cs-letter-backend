@@ -114,7 +114,7 @@ public class MemberService {
         KakaoProfile profile = findProfile(token);
 
         if(memberRepository.findByKakaoNickname(profile.getProperties().getNickname()).isEmpty()) {
-            Member member = memberRepository.findByKakaoNickname(profile.getProperties().getNickname()).orElseThrow();
+            Member member;
             member = Member.builder()
                     .kakaoId(profile.getId())
                     .kakaoProfileImg(profile.getKakao_account().getProfile().getProfile_image_url())
