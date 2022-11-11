@@ -129,8 +129,8 @@ public class JwtService {
         try {
             JWT.require(Algorithm.HMAC512(secret)).build().verify(token);
             return true;
-        }catch (Exception e) {
-            throw new MemberException(MemberExceptionType.TOKEN_INVALID);
+        }catch (JwtException e) {
+            return false;
         }
     }
 
