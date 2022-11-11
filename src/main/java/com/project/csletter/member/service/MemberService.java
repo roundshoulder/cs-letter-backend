@@ -136,7 +136,7 @@ public class MemberService {
 
     public String getMemberTokenByToken(String token) {
         KakaoProfile profile = findProfile(token);
-        Member member = memberRepository.findByKakaoEmail(profile.getKakao_account().getEmail());
+        Member member = memberRepository.findByKakaoNickname(profile.getProperties().getNickname()).orElseThrow();
 
         return member.getMemberToken();
     }
