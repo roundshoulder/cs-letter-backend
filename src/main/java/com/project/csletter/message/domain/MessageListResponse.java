@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @NoArgsConstructor
 public class MessageListResponse {
@@ -13,6 +15,8 @@ public class MessageListResponse {
     private String toMemberToken;
     private Long color;
     private Boolean haveNextMessage;
+    private LocalDateTime time;
+    private Boolean isCorrect;
 
     @Builder
     public MessageListResponse(Message message) {
@@ -21,6 +25,7 @@ public class MessageListResponse {
         this.nickname = message.getNickname();
         this.toMemberToken = message.getToMemberToken();
         this.color = message.getColor();
+        this.time = message.getCreateDate();
     }
 
 }
