@@ -2,10 +2,7 @@ package com.project.csletter.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.project.csletter.member.domain.Member;
-import com.project.csletter.member.exception.MemberException;
-import com.project.csletter.member.exception.MemberExceptionType;
 import com.project.csletter.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,7 +39,6 @@ public class JwtService {
     private static final String ID = "UserCode";
     private static final String BEARER = "Bearer ";
     private static final String KAKAONICKNAME = "KakaoNickName";
-    private static final String ROLE = "role";
 
     private final MemberRepository memberRepository;
 
