@@ -13,6 +13,7 @@ public class MessageResponse {
     private String toMemberToken;
     private Long color;
     private LocalDateTime time;
+    private Boolean isCorrect;
 
     @Builder
     public MessageResponse(Message message) {
