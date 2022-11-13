@@ -1,6 +1,7 @@
 package com.project.csletter.message.service;
 
 import com.project.csletter.global.utils.SecurityUtil;
+import com.project.csletter.marking.repository.MarkingRepository;
 import com.project.csletter.member.domain.Member;
 import com.project.csletter.member.exception.MemberException;
 import com.project.csletter.member.exception.MemberExceptionType;
@@ -23,6 +24,7 @@ public class MessageService {
 
     private final MessageRepository messageRepository;
     private final MemberRepository memberRepository;
+    private final MarkingRepository markingRepository;
 
     public void write(MessageCreate messageCreate) {
         Message message = Message.builder()
@@ -63,6 +65,7 @@ public class MessageService {
                 .collect(Collectors.toList());
 
         mainList.forEach( f -> {
+            f.setIsCorrect(f.getBody().equals(markingRepository.findByMessageId(f.getMessageId()).orElseThrow().getBody()));
             f.setBody(initialList(f.getBody()));
             f.setHaveNextMessage(!messageRepository.mainFeedLess(memberToken, f.getMessageId(), pageable).isEmpty());
         });
