@@ -92,6 +92,7 @@ public class MessageService {
             MessageResponse result = new MessageResponse(message);
 
             result.setBody(initialList(result.getBody()));
+            result.setIsCorrect(result.getBody().equals(markingRepository.findByMessageId(result.getMessageId()).orElseThrow().getBody()));
 
             return result;
         } else {
