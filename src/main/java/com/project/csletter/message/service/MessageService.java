@@ -65,7 +65,12 @@ public class MessageService {
                 .collect(Collectors.toList());
 
         mainList.forEach( f -> {
-            f.setIsCorrect(f.getBody().equals(markingRepository.findByMessageId(f.getMessageId()).orElseThrow().getBody()));
+            if(markingRepository.findByMessageId(f.getMessageId()).isEmpty()){
+                f.setIsCorrect(false);
+            }else {
+                f.setIsCorrect(f.getBody().equals(markingRepository.findByMessageId(f.getMessageId()).orElseThrow().getBody()));
+            }
+
             f.setBody(initialList(f.getBody()));
             f.setHaveNextMessage(!messageRepository.mainFeedLess(memberToken, f.getMessageId(), pageable).isEmpty());
         });
@@ -91,8 +96,13 @@ public class MessageService {
         if(message.getToMemberToken().equals(member.getMemberToken())) {
             MessageResponse result = new MessageResponse(message);
 
+            if(markingRepository.findByMessageId(result.getMessageId()).isEmpty()) {
+                result.setIsCorrect(false);
+            } else {
+                result.setIsCorrect(result.getBody().equals(markingRepository.findByMessageId(result.getMessageId()).orElseThrow().getBody()));
+            }
             result.setBody(initialList(result.getBody()));
-            result.setIsCorrect(result.getBody().equals(markingRepository.findByMessageId(result.getMessageId()).orElseThrow().getBody()));
+
 
             return result;
         } else {
