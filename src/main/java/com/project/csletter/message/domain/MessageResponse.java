@@ -2,6 +2,8 @@ package com.project.csletter.message.domain;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Data
 @NoArgsConstructor
 public class MessageResponse {
@@ -10,6 +12,7 @@ public class MessageResponse {
     private String nickname;
     private String toMemberToken;
     private Long color;
+    private LocalDateTime time;
 
     @Builder
     public MessageResponse(Message message) {
@@ -18,6 +21,7 @@ public class MessageResponse {
         this.nickname = message.getNickname();
         this.toMemberToken = message.getToMemberToken();
         this.color = message.getColor();
+        this.time = message.getCreateDate();
     }
 
 }
