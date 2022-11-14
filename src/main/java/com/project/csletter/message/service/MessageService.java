@@ -3,6 +3,7 @@ package com.project.csletter.message.service;
 import com.project.csletter.global.utils.SecurityUtil;
 import com.project.csletter.marking.domain.Marking;
 import com.project.csletter.marking.repository.MarkingRepository;
+import com.project.csletter.marking.service.MarkingService;
 import com.project.csletter.member.domain.Member;
 import com.project.csletter.member.exception.MemberException;
 import com.project.csletter.member.exception.MemberExceptionType;
@@ -26,6 +27,7 @@ public class MessageService {
     private final MessageRepository messageRepository;
     private final MemberRepository memberRepository;
     private final MarkingRepository markingRepository;
+    private final MarkingService markingService;
 
     public void write(MessageCreate messageCreate) {
         Message message = Message.builder()
@@ -102,12 +104,16 @@ public class MessageService {
                 result.getMarkingResult().setBody(null);
                 result.getMarkingResult().setCount(0L);
                 result.getMarkingResult().setTotalCount(0L);
+                result.getMarkingResult().setResult(null);
             } else {
+                Boolean[] markingResult = new Boolean[result.getBody().length()];
+
                 Marking marking = markingRepository.findByMessageId(result.getMessageId()).orElseThrow();
                 result.setIsCorrect(result.getBody().equals(marking.getBody()));
                 result.getMarkingResult().setBody(marking.getBody());
                 result.getMarkingResult().setCount(marking.getCount());
                 result.getMarkingResult().setTotalCount(marking.getTotalCount());
+                result.getMarkingResult().setResult(getMarkingResult(marking.getBody(), result.getBody(), markingResult));
             }
             result.setBody(initialList(result.getBody()));
 
@@ -116,5 +122,15 @@ public class MessageService {
         } else {
             throw new MemberException(MemberExceptionType.TOKEN_INVALID);
         }
+    }
+
+    public Boolean[] getMarkingResult(String markingBody, String messageBody, Boolean[] result) {
+        for(int i = 0; i < messageBody.length(); i++) {
+            if(messageBody.charAt(i) >= '\uAC00' && messageBody.charAt(i) <= '\uD7A3') {
+                result[i] = markingBody.charAt(i) == messageBody.charAt(i);
+            }
+        }
+
+        return result;
     }
 }
