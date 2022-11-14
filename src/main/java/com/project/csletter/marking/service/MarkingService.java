@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static java.lang.Math.min;
+
 @Service
 @RequiredArgsConstructor
 public class MarkingService {
@@ -45,7 +47,7 @@ public class MarkingService {
 
         Marking marking = markingRepository.findByMessageId(markingCreate.getMessageId()).orElseThrow();
 
-        for(int i = 0; i < message.getBody().length(); i++) {
+        for(int i = 0; i < min(message.getBody().length(), marking.getBody().length()); i++) {
             result[i] = markingCreate.getBody().charAt(i) == message.getBody().charAt(i);
         }
 
