@@ -11,6 +11,6 @@ public interface MarkingRepository extends JpaRepository<Marking, Long> {
 
     Optional<Marking> findByMessageId(long messageId);
 
-    @Query(value = "SELECT * FROM post", nativeQuery = true)
+    @Query(value = "SELECT * FROM marking", nativeQuery = true)
     List<Marking> getList();
 }
