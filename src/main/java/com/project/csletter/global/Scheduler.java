@@ -17,7 +17,7 @@ public class Scheduler {
 
     private final MarkingRepository markingRepository;
 
-    @Scheduled(cron = "0 */5 * * * *")
+    @Scheduled(cron = "0 0 0 * * *")
     public void resetCount() {
         List<Marking> list = markingRepository.getList();
         list.forEach( f -> {
