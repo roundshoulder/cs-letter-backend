@@ -126,9 +126,7 @@ public class MessageService {
 
     public Boolean[] getMarkingResult(String markingBody, String messageBody, Boolean[] result) {
         for(int i = 0; i < messageBody.length(); i++) {
-            if(messageBody.charAt(i) >= '\uAC00' && messageBody.charAt(i) <= '\uD7A3') {
-                result[i] = markingBody.charAt(i) == messageBody.charAt(i);
-            }
+            result[i] = markingBody.charAt(i) == messageBody.charAt(i);
         }
 
         return result;
