@@ -74,7 +74,7 @@ public class MessageService {
                 f.setIsCorrect(f.getBody().equals(markingRepository.findByMessageId(f.getMessageId()).orElseThrow().getBody()));
             }
 
-            f.setBody(initialList(f.getBody()));
+            f.setBody(f.getBody().length() > 20 ? initialList(f.getBody()).substring(0, 20) : initialList(f.getBody()));
             f.setHaveNextMessage(!messageRepository.mainFeedLess(memberToken, f.getMessageId(), pageable).isEmpty());
         });
 
