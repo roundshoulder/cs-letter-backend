@@ -100,7 +100,7 @@ public class MessageService {
             MessageResponse result = new MessageResponse(message);
 
             if(markingRepository.findByMessageId(result.getMessageId()).isEmpty()) {
-                result.setIsCorrect(false);
+                result.getMarkingResult().setIsCorrect(false);
                 result.getMarkingResult().setBody(null);
                 result.getMarkingResult().setCount(0L);
                 result.getMarkingResult().setTotalCount(0L);
@@ -109,7 +109,7 @@ public class MessageService {
                 Boolean[] markingResult = new Boolean[result.getBody().length()];
 
                 Marking marking = markingRepository.findByMessageId(result.getMessageId()).orElseThrow();
-                result.setIsCorrect(result.getBody().equals(marking.getBody()));
+                result.getMarkingResult().setIsCorrect(result.getBody().equals(marking.getBody()));
                 result.getMarkingResult().setBody(marking.getBody());
                 result.getMarkingResult().setCount(marking.getCount());
                 result.getMarkingResult().setTotalCount(marking.getTotalCount());
