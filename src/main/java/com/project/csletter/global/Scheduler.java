@@ -6,16 +6,18 @@ import com.project.csletter.marking.repository.MarkingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Component
 @RequiredArgsConstructor
+@Transactional
 public class Scheduler {
 
     private final MarkingRepository markingRepository;
 
-    @Scheduled(cron = "0 0 0 * * *")
+    @Scheduled(cron = "0 */5 * * * *")
     public void resetCount() {
         List<Marking> list = markingRepository.getList();
         list.forEach( f -> {
