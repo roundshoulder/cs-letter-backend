@@ -10,6 +10,7 @@ import lombok.*;
 public class MarkingLastResponse {
 
     private String body;
+    private Boolean[] result;
     private Long count;
     private Long totalCount;
 }
