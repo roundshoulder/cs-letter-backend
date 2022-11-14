@@ -14,7 +14,6 @@ public class MessageResponse {
     private String toMemberToken;
     private Long color;
     private LocalDateTime time;
-    private Boolean isCorrect;
     private MarkingLastResponse markingResult;
 
     @Builder
