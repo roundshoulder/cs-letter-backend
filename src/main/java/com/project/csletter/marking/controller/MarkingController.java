@@ -35,8 +35,18 @@ public class MarkingController {
 
     @GetMapping("/marking/{messageId}")
     public MarkingLastResponse getMarking(@PathVariable Long messageId) {
+        if(markingRepository.findByMessageId(messageId).isEmpty()) {
+            return MarkingLastResponse.builder()
+                    .body(null)
+                    .count(0L)
+                    .totalCount(0L)
+                    .build();
+        }
         Marking marking = markingRepository.findByMessageId(messageId).orElseThrow();
         return MarkingLastResponse.builder()
-                .body(marking.getBody()).build();
+                .body(marking.getBody())
+                .count(marking.getCount())
+                .totalCount(marking.getTotalCount())
+                .build();
     }
 }
