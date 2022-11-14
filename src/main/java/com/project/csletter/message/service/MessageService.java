@@ -1,6 +1,7 @@
 package com.project.csletter.message.service;
 
 import com.project.csletter.global.utils.SecurityUtil;
+import com.project.csletter.marking.domain.Marking;
 import com.project.csletter.marking.repository.MarkingRepository;
 import com.project.csletter.member.domain.Member;
 import com.project.csletter.member.exception.MemberException;
@@ -98,8 +99,15 @@ public class MessageService {
 
             if(markingRepository.findByMessageId(result.getMessageId()).isEmpty()) {
                 result.setIsCorrect(false);
+                result.getMarkingResult().setBody(null);
+                result.getMarkingResult().setCount(0L);
+                result.getMarkingResult().setTotalCount(0L);
             } else {
-                result.setIsCorrect(result.getBody().equals(markingRepository.findByMessageId(result.getMessageId()).orElseThrow().getBody()));
+                Marking marking = markingRepository.findByMessageId(result.getMessageId()).orElseThrow();
+                result.setIsCorrect(result.getBody().equals(marking.getBody()));
+                result.getMarkingResult().setBody(marking.getBody());
+                result.getMarkingResult().setCount(marking.getCount());
+                result.getMarkingResult().setTotalCount(marking.getTotalCount());
             }
             result.setBody(initialList(result.getBody()));
 
