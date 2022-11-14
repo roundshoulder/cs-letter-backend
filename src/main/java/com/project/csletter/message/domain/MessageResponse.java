@@ -1,5 +1,6 @@
 package com.project.csletter.message.domain;
 
+import com.project.csletter.marking.domain.MarkingLastResponse;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -14,6 +15,7 @@ public class MessageResponse {
     private Long color;
     private LocalDateTime time;
     private Boolean isCorrect;
+    private MarkingLastResponse markingResult;
 
     @Builder
     public MessageResponse(Message message) {
@@ -23,6 +25,7 @@ public class MessageResponse {
         this.toMemberToken = message.getToMemberToken();
         this.color = message.getColor();
         this.time = message.getCreateDate();
+        this.markingResult = MarkingLastResponse.builder().build();
     }
 
 }
