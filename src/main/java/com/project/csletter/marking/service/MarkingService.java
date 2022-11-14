@@ -46,9 +46,7 @@ public class MarkingService {
         Marking marking = markingRepository.findByMessageId(markingCreate.getMessageId()).orElseThrow();
 
         for(int i = 0; i < message.getBody().length(); i++) {
-            if(message.getBody().charAt(i) >= '\uAC00' && message.getBody().charAt(i) <= '\uD7A3') {
-                result[i] = markingCreate.getBody().charAt(i) == message.getBody().charAt(i);
-            }
+            result[i] = markingCreate.getBody().charAt(i) == message.getBody().charAt(i);
         }
 
         return MarkingResponse.builder()
