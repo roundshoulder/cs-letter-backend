@@ -20,6 +20,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+
 @Service
 @RequiredArgsConstructor
 public class MessageService {
@@ -125,7 +128,7 @@ public class MessageService {
     }
 
     public Boolean[] getMarkingResult(String markingBody, String messageBody, Boolean[] result) {
-        for(int i = 0; i < messageBody.length(); i++) {
+        for(int i = 0; i < min(markingBody.length(), messageBody.length()); i++) {
             result[i] = markingBody.charAt(i) == messageBody.charAt(i);
         }
 
