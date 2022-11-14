@@ -13,4 +13,5 @@ public class MarkingLastResponse {
     private Boolean[] result;
     private Long count;
     private Long totalCount;
+    private Boolean isCorrect;
 }
