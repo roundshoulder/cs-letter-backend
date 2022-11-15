@@ -9,7 +9,10 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class MarkingResponse {
+    private String body;
     private Boolean[] result;
+    private Boolean isCorrect;
     private Long count;
     private Long totalCount;
+
 }
