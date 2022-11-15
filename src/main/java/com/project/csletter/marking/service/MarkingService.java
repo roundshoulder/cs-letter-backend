@@ -51,10 +51,15 @@ public class MarkingService {
             result[i] = markingCreate.getBody().charAt(i) == message.getBody().charAt(i);
         }
 
-        return MarkingResponse.builder()
+        MarkingResponse response = MarkingResponse.builder()
                 .result(result)
                 .count(marking.getCount())
                 .totalCount(marking.getTotalCount())
                 .build();
+
+        response.setBody(markingCreate.getBody());
+        response.setIsCorrect(message.getBody().equals(markingCreate.getBody()));
+
+        return response;
     }
 }
