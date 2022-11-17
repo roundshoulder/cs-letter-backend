@@ -4,6 +4,8 @@ import com.project.csletter.marking.domain.Marking;
 import com.project.csletter.marking.domain.MarkingCreate;
 import com.project.csletter.marking.domain.MarkingLastResponse;
 import com.project.csletter.marking.domain.MarkingResponse;
+import com.project.csletter.marking.exception.MarkingException;
+import com.project.csletter.marking.exception.MarkingExceptionType;
 import com.project.csletter.marking.repository.MarkingRepository;
 import com.project.csletter.marking.service.MarkingService;
 import com.project.csletter.message.domain.Message;
@@ -25,6 +27,10 @@ public class MarkingController {
     public MarkingResponse marking(@RequestBody MarkingCreate markingCreate) {
 
         markingService.marking(markingCreate);
+
+        if(markingRepository.findByMessageId(markingCreate.getMessageId()).orElseThrow().getCount() > 5) {
+            throw new MarkingException(MarkingExceptionType.MarkingOverFlow);
+        }
 
         Message message = messageRepository.findById(markingCreate.getMessageId()).orElseThrow();
 
