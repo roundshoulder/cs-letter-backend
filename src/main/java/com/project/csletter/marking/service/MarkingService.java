@@ -31,13 +31,17 @@ public class MarkingService {
             markingRepository.save(marking);
         } else {
             Marking marking = markingRepository.findByMessageId(markingCreate.getMessageId()).orElseThrow();
-
             MarkingUpdater.MarkingUpdaterBuilder updaterBuilder = marking.toUpdater();
+
+            if(marking.getCount() >= 5) {
+                updaterBuilder.count(marking.getCount() + 1L);
+                marking.update(updaterBuilder.build());
+                return;
+            }
 
             updaterBuilder.body(markingCreate.getBody());
             updaterBuilder.count(marking.getCount() + 1L);
             updaterBuilder.totalCount(marking.getTotalCount() + 1L);
-
             marking.update(updaterBuilder.build());
         }
 
