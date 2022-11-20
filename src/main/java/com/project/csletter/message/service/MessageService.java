@@ -17,10 +17,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static java.lang.Math.max;
 import static java.lang.Math.min;
 
 @Service
@@ -74,10 +75,10 @@ public class MessageService {
             if(markingRepository.findByMessageId(f.getMessageId()).isEmpty()){
                 f.setIsCorrect(false);
             }else {
-                f.setIsCorrect(f.getBody().equals(markingRepository.findByMessageId(f.getMessageId()).orElseThrow().getBody()));
+                f.setIsCorrect(f.getBody().containsAll(markingRepository.findByMessageId(f.getMessageId()).orElseThrow().getBody()));
             }
 
-            f.setBody(f.getBody().length() > 20 ? initialList(f.getBody()).substring(0, 20) : initialList(f.getBody()));
+            f.setBody(Collections.singletonList(f.getBody().get(0).length() > 20 ? initialList(f.getBody().get(0)).substring(0, 20) : initialList(f.getBody().get(0))));
             f.setHaveNextMessage(!messageRepository.mainFeedLess(memberToken, f.getMessageId(), pageable).isEmpty());
         });
 
@@ -109,27 +110,36 @@ public class MessageService {
                 result.getMarkingResult().setTotalCount(0L);
                 result.getMarkingResult().setResult(null);
             } else {
-                Boolean[] markingResult = new Boolean[result.getBody().length()];
+                Boolean[][] markingResult = new Boolean[result.getBody().size()][];
 
                 Marking marking = markingRepository.findByMessageId(result.getMessageId()).orElseThrow();
-                result.getMarkingResult().setIsCorrect(result.getBody().equals(marking.getBody()));
+                result.getMarkingResult().setIsCorrect(result.getBody().containsAll(marking.getBody()));
                 result.getMarkingResult().setBody(marking.getBody());
                 result.getMarkingResult().setCount(marking.getCount());
                 result.getMarkingResult().setTotalCount(marking.getTotalCount());
                 result.getMarkingResult().setResult(getMarkingResult(marking.getBody(), result.getBody(), markingResult));
             }
-            result.setBody(initialList(result.getBody()));
 
+            List<String> initBody = new ArrayList<>();
 
+            for(int i = 0; i < result.getBody().size(); i++) {
+                initBody.add(initialList(result.getBody().get(i)));
+            }
+
+            result.setBody(initBody);
             return result;
         } else {
             throw new MemberException(MemberExceptionType.TOKEN_INVALID);
         }
     }
 
-    public Boolean[] getMarkingResult(String markingBody, String messageBody, Boolean[] result) {
-        for(int i = 0; i < min(markingBody.length(), messageBody.length()); i++) {
-            result[i] = markingBody.charAt(i) == messageBody.charAt(i);
+    public Boolean[][] getMarkingResult(List<String> markingBody, List<String> messageBody, Boolean[][] result) {
+
+        for (int j = 0; j < result.length; j++) {
+            result[j] = new Boolean[messageBody.get(j).length()];
+            for (int i = 0; i < min(markingBody.get(j).length(), messageBody.get(j).length()); i++) {
+                result[j][i] = markingBody.get(j).charAt(i) == messageBody.get(j).charAt(i);
+            }
         }
 
         return result;
