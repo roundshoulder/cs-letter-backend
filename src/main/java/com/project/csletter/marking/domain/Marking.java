@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -20,7 +22,10 @@ public class Marking extends BaseTimeEntity {
     @Column(name = "marking_id")
     private Long id;
 
-    private String body;
+    @Column(name = "body")
+    @ElementCollection(targetClass = String.class)
+    @Builder.Default
+    private List<String> body = new ArrayList<>();
 
     private Long count;
 
