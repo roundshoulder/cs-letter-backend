@@ -2,6 +2,8 @@ package com.project.csletter.marking.domain;
 
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @ToString
@@ -9,8 +11,8 @@ import lombok.*;
 @Builder
 public class MarkingLastResponse {
 
-    private String body;
-    private Boolean[] result;
+    private List<String> body;
+    private Boolean[][] result;
     private Long count;
     private Long totalCount;
     private Boolean isCorrect;
