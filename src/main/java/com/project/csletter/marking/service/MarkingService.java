@@ -47,12 +47,14 @@ public class MarkingService {
 
     }
 
-    public MarkingResponse getResult(MarkingCreate markingCreate, Message message, Boolean[] result) {
+    public MarkingResponse getResult(MarkingCreate markingCreate, Message message, Boolean[][] result) {
 
         Marking marking = markingRepository.findByMessageId(markingCreate.getMessageId()).orElseThrow();
-
-        for(int i = 0; i < min(message.getBody().length(), marking.getBody().length()); i++) {
-            result[i] = markingCreate.getBody().charAt(i) == message.getBody().charAt(i);
+        for(int j = 0; j < result.length; j++) {
+            result[j] = new Boolean[message.getBody().get(j).length()];
+            for (int i = 0; i < min(message.getBody().get(j).length(), marking.getBody().get(j).length()); i++) {
+                result[j][i] = markingCreate.getBody().get(j).charAt(i) == message.getBody().get(j).charAt(i);
+            }
         }
 
         MarkingResponse response = MarkingResponse.builder()
@@ -62,7 +64,7 @@ public class MarkingService {
                 .build();
 
         response.setBody(markingCreate.getBody());
-        response.setIsCorrect(message.getBody().equals(markingCreate.getBody()));
+        response.setIsCorrect(message.getBody().containsAll(markingCreate.getBody()));
 
         return response;
     }
