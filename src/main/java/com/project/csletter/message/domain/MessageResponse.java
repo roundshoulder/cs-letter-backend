@@ -4,12 +4,13 @@ import com.project.csletter.marking.domain.MarkingLastResponse;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
 public class MessageResponse {
     private Long messageId;
-    private String body;
+    private List<String> body;
     private String nickname;
     private String toMemberToken;
     private Long color;
