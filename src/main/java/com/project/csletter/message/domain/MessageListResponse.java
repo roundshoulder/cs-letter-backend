@@ -5,12 +5,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
 public class MessageListResponse {
     private Long messageId;
-    private String body;
+    private List<String> body;
     private String nickname;
     private String toMemberToken;
     private Long color;
