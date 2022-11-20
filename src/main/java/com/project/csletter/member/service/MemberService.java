@@ -113,7 +113,7 @@ public class MemberService {
     public String saveMemberAndGetToken(String token) {
         KakaoProfile profile = findProfile(token);
 
-        if(memberRepository.findByKakaoNickname(profile.getProperties().getNickname()).isEmpty()) {
+        if(memberRepository.findByKakaoId(profile.getId()).isEmpty()) {
             Member member;
             member = Member.builder()
                     .kakaoId(profile.getId())
@@ -123,9 +123,15 @@ public class MemberService {
                     .memberToken(createMemberToken())
                     .userRole("USER").build();
 
-            memberRepository.save(member);
-            member.updateRefreshToken(jwtService.createRefreshToken());
-            return jwtService.createAccessToken(member);
+            if(memberRepository.findByMemberToken(member.getMemberToken()).isEmpty()) {
+                memberRepository.save(member);
+                member.updateRefreshToken(jwtService.createRefreshToken());
+                return jwtService.createAccessToken(member);
+            }else {
+                throw new MemberException(MemberExceptionType.ALREADY_EXIST_USERNAME);
+            }
+
+
         }else {
             Member member = memberRepository.findByKakaoNickname(profile.getProperties().getNickname()).orElseThrow();
             member.updateRefreshToken(jwtService.createRefreshToken());
@@ -205,13 +211,13 @@ public class MemberService {
             int choice = random.nextInt(3);
             switch(choice) {
                 case 0:
-                    newWord.append((char)((int)random.nextInt(25)+97));
+                    newWord.append((char)(random.nextInt(25) +97));
                     break;
                 case 1:
-                    newWord.append((char)((int)random.nextInt(25)+65));
+                    newWord.append((char)(random.nextInt(25) +65));
                     break;
                 case 2:
-                    newWord.append((char)((int)random.nextInt(10)+48));
+                    newWord.append((char)(random.nextInt(10) +48));
                     break;
                 default:
                     break;
