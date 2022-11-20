@@ -54,8 +54,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     private void checkAccessTokenAndAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-
-
         jwtService.extractAccessToken(request).filter(jwtService::isTokenValid).ifPresent(
 
                 accessToken -> jwtService.extractUsername(accessToken).ifPresent(
