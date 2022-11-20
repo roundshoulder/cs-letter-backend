@@ -34,7 +34,7 @@ public class MarkingController {
 
         Message message = messageRepository.findById(markingCreate.getMessageId()).orElseThrow();
 
-        Boolean[] result = new Boolean[message.getBody().length()];;
+        Boolean[][] result = new Boolean[message.getBody().size()][];
 
         return markingService.getResult(markingCreate, message, result);
     }
