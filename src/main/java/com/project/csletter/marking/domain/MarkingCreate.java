@@ -2,6 +2,8 @@ package com.project.csletter.marking.domain;
 
 import lombok.*;
 
+import java.util.List;
+
 @Data
 @Getter
 @Setter
@@ -10,6 +12,6 @@ import lombok.*;
 @Builder
 public class MarkingCreate {
 
-    private String body;
+    private List<String> body;
     private Long messageId;
 }
