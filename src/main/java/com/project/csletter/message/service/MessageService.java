@@ -34,8 +34,22 @@ public class MessageService {
     private final MarkingService markingService;
 
     public void write(MessageCreate messageCreate) {
+
+        List<String> bodyList = new ArrayList<>();
+
+        int startIndex = 0;
+
+        for(int i = 0; i < messageCreate.getBody().length()/24 + 1; i++) {
+            if(messageCreate.getBody().length() - startIndex < 24) {
+                bodyList.add(messageCreate.getBody().substring(startIndex));
+                break;
+            }
+            bodyList.add(messageCreate.getBody().substring(startIndex, (i+1)*24));
+            startIndex = startIndex + (i+1)*24;
+        }
+
         Message message = Message.builder()
-                .body(messageCreate.getBody())
+                .body(bodyList)
                 .nickname(messageCreate.getNickname())
                 .toMemberToken(messageCreate.getToMemberToken())
                 .color(messageCreate.getColor())
