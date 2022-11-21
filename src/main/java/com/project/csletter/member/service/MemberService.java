@@ -7,10 +7,13 @@ import com.project.csletter.global.utils.SecurityUtil;
 import com.project.csletter.jwt.JwtService;
 import com.project.csletter.jwt.TokenRequestDto;
 import com.project.csletter.jwt.TokenResponseDto;
+import com.project.csletter.marking.repository.MarkingRepository;
 import com.project.csletter.member.domain.*;
 import com.project.csletter.member.exception.MemberException;
 import com.project.csletter.member.exception.MemberExceptionType;
 import com.project.csletter.member.repository.MemberRepository;
+import com.project.csletter.message.domain.Message;
+import com.project.csletter.message.repository.MessageRepository;
 import jdk.jshell.spi.ExecutionControl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +30,7 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.ServletException;
 import java.rmi.ServerError;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
@@ -37,6 +41,8 @@ import java.util.Random;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final MessageRepository messageRepository;
+    private final MarkingRepository markingRepository;
     private final JwtService jwtService;
 
     @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
@@ -162,7 +168,26 @@ public class MemberService {
                 .userRole(member.getUserRole())
                 .refreshToken(member.getRefreshToken())
                 .memberToken(member.getMemberToken())
+                .countMessage(messageRepository.countAllByToMemberToken(member.getMemberToken()))
+                .correctMessage(0L)
+                .notRead(messageRepository.countAllByToMemberTokenAndIsReadFalse(member.getMemberToken()))
+                .solving(0L)
                 .build();
+
+
+
+        List<Message> messages = messageRepository.findAllByToMemberToken(member.getMemberToken());
+
+        messages.forEach(f -> {
+            if(!markingRepository.findByMessageId(f.getId()).isEmpty()) {
+                if(f.getBody().containsAll(markingRepository.findByMessageId(f.getId()).orElseThrow().getBody())) {
+                    memberResponse.setCorrectMessage(memberResponse.getCorrectMessage()+1L);
+                }
+            }
+        });
+
+        memberResponse.setSolving(memberResponse.getCountMessage() - memberResponse.getCorrectMessage() - memberResponse.getNotRead());
+
         return memberResponse;
     }
 
@@ -178,6 +203,10 @@ public class MemberService {
                 .kakaoEmail(member.getKakaoEmail())
                 .userRole(member.getUserRole())
                 .memberToken(member.getMemberToken())
+                .countMessage(messageRepository.countAllByToMemberToken(member.getMemberToken()))
+                .correctMessage(0L)
+                .notRead(messageRepository.countAllByToMemberTokenAndIsReadFalse(member.getMemberToken()))
+                .solving(0L)
                 .build();
 
         try {
@@ -186,6 +215,18 @@ public class MemberService {
         }catch (ClassCastException e) {
             memberProfile.setIsMe(false);
         }
+
+        List<Message> messages = messageRepository.findAllByToMemberToken(member.getMemberToken());
+
+        messages.forEach(f -> {
+            if(!markingRepository.findByMessageId(f.getId()).isEmpty()) {
+                if(f.getBody().containsAll(markingRepository.findByMessageId(f.getId()).orElseThrow().getBody())) {
+                    memberProfile.setCorrectMessage(memberProfile.getCorrectMessage()+1L);
+                }
+            }
+        });
+
+        memberProfile.setSolving(memberProfile.getCountMessage() - memberProfile.getCorrectMessage() - memberProfile.getNotRead());
 
         return memberProfile;
     }
