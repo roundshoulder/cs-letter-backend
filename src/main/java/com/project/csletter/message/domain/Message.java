@@ -20,7 +20,7 @@ public class Message extends BaseTimeEntity {
     @Column(name = "message_id")
     private Long id;
 
-    @Column(name = "body")
+    @Column(name = "body", length = 1000)
     @ElementCollection(targetClass = String.class)
     @Builder.Default
     private List<String> body = new ArrayList<>();
