@@ -39,13 +39,13 @@ public class MessageService {
 
         int startIndex = 0;
 
-        for(int i = 0; i < messageCreate.getBody().length()/24 + 1; i++) {
+        for(int i = 1; i <= messageCreate.getBody().length()/24; i++) {
             if(messageCreate.getBody().length() - startIndex < 24) {
                 bodyList.add(messageCreate.getBody().substring(startIndex));
                 break;
             }
-            bodyList.add(messageCreate.getBody().substring(startIndex, (i+1)*24));
-            startIndex = startIndex + (i+1)*24;
+            bodyList.add(messageCreate.getBody().substring(startIndex, i*24));
+            startIndex = startIndex + 24;
         }
 
         for(int i = 0; i < bodyList.size(); i++) {
