@@ -3,19 +3,16 @@ package com.project.csletter.message.service;
 import com.project.csletter.global.utils.SecurityUtil;
 import com.project.csletter.marking.domain.Marking;
 import com.project.csletter.marking.repository.MarkingRepository;
-import com.project.csletter.marking.service.MarkingService;
 import com.project.csletter.member.domain.Member;
 import com.project.csletter.member.exception.MemberException;
 import com.project.csletter.member.exception.MemberExceptionType;
 import com.project.csletter.member.repository.MemberRepository;
-import com.project.csletter.message.domain.Message;
-import com.project.csletter.message.domain.MessageCreate;
-import com.project.csletter.message.domain.MessageListResponse;
-import com.project.csletter.message.domain.MessageResponse;
+import com.project.csletter.message.domain.*;
 import com.project.csletter.message.repository.MessageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,7 +28,6 @@ public class MessageService {
     private final MessageRepository messageRepository;
     private final MemberRepository memberRepository;
     private final MarkingRepository markingRepository;
-    private final MarkingService markingService;
 
     public void write(MessageCreate messageCreate) {
 
@@ -63,6 +59,7 @@ public class MessageService {
                 .nickname(messageCreate.getNickname())
                 .toMemberToken(messageCreate.getToMemberToken())
                 .color(messageCreate.getColor())
+                .isRead(false)
                 .build();
 
         messageRepository.save(message);
@@ -116,6 +113,7 @@ public class MessageService {
     }
 
 
+    @Transactional
     public MessageResponse getMessage(Long messageId) {
 
         Member member = memberRepository.findByKakaoNickname((SecurityUtil.getLoginUsername()))
@@ -126,6 +124,10 @@ public class MessageService {
 
         if(message.getToMemberToken().equals(member.getMemberToken())) {
             MessageResponse result = new MessageResponse(message);
+
+            MessageUpdater.MessageUpdaterBuilder messageUpdaterBuilder = message.toUpdater();
+            messageUpdaterBuilder.isRead(true);
+            message.update(messageUpdaterBuilder.build());
 
             if(markingRepository.findByMessageId(result.getMessageId()).isEmpty()) {
                 result.getMarkingResult().setIsCorrect(false);
