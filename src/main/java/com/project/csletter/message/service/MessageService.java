@@ -48,6 +48,12 @@ public class MessageService {
             startIndex = startIndex + (i+1)*24;
         }
 
+        for(int i = 0; i < bodyList.size(); i++) {
+            if (bodyList.get(i).charAt(bodyList.get(i).length() - 1) == ' ') {
+                bodyList.set(i, bodyList.get(i).substring(0, bodyList.get(i).length() - 1));
+            }
+        }
+
         Message message = Message.builder()
                 .body(bodyList)
                 .nickname(messageCreate.getNickname())
