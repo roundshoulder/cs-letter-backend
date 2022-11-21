@@ -59,6 +59,11 @@ public class MemberController {
         MemberProfile memberProfile = memberService.getMemberInfo(memberToken);
         return new ResponseEntity(memberProfile, HttpStatus.OK);
     }
+    @GetMapping("/member/name/{memberToken}")
+    public ResponseEntity getMemberName(@PathVariable String memberToken) {
+        String memberName = memberService.getMemberName(memberToken);
+        return ResponseEntity.ok().body(memberName);
+    }
 
     @PostMapping("/reIssue")
     public TokenResponseDto reIssue(@RequestBody TokenRequestDto tokenRequestDto){
