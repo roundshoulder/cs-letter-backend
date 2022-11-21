@@ -26,4 +26,12 @@ public class MemberResponse {
     private String refreshToken;
 
     private String memberToken;
+
+    private Long countMessage;
+
+    private Long correctMessage;
+
+    private Long solving;
+
+    private Long notRead;
 }
