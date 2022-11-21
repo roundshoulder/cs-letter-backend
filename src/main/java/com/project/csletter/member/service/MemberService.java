@@ -190,6 +190,14 @@ public class MemberService {
         return memberProfile;
     }
 
+    public String getMemberName(String memberToken) {
+        Member member = memberRepository.findByMemberToken(memberToken)
+                .orElseThrow();
+
+        return member.getKakaoNickname();
+    }
+
+
     @Transactional
     public TokenResponseDto reIssue(TokenRequestDto requestDto) {
         if (!jwtService.isTokenValid(requestDto.getRefreshToken())) {
