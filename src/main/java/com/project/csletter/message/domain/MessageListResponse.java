@@ -18,6 +18,7 @@ public class MessageListResponse {
     private Boolean haveNextMessage;
     private LocalDateTime time;
     private Boolean isCorrect;
+    private Boolean isRead;
 
     @Builder
     public MessageListResponse(Message message) {
@@ -27,6 +28,7 @@ public class MessageListResponse {
         this.toMemberToken = message.getToMemberToken();
         this.color = message.getColor();
         this.time = message.getCreateDate();
+        this.isRead = message.getIsRead();
     }
 
 }
