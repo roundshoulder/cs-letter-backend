@@ -31,5 +31,15 @@ public class Message extends BaseTimeEntity {
 
     private Long color;
 
+    private Boolean isRead;
+
+    public MessageUpdater.MessageUpdaterBuilder toUpdater() {
+        return MessageUpdater.builder()
+                .isRead(isRead);
+    }
+
+    public void update(MessageUpdater messageUpdater) {
+        isRead = messageUpdater.getIsRead();
+    }
 
 }
