@@ -40,17 +40,29 @@ public class MessageService {
         }
 
         for(int i = 1; i <= messageCreate.getBody().length()/24; i++) {
+            String tmpString;
             if(messageCreate.getBody().length() - startIndex < 24) {
                 bodyList.add(messageCreate.getBody().substring(startIndex));
                 break;
             }
-            bodyList.add(messageCreate.getBody().substring(startIndex, i*24));
-            startIndex = startIndex + 24;
+            tmpString = messageCreate.getBody().substring(startIndex, startIndex+25);
+            int lastIndex = tmpString.length()-1;
+            if(tmpString.contains(" ")) {
+                while(tmpString.charAt(lastIndex) != ' ') {
+                    lastIndex--;
+                }
+            }
+
+            bodyList.add(tmpString.substring(0, lastIndex));
+            startIndex = startIndex + lastIndex;
         }
 
         for(int i = 0; i < bodyList.size(); i++) {
             if (bodyList.get(i).charAt(bodyList.get(i).length() - 1) == ' ') {
                 bodyList.set(i, bodyList.get(i).substring(0, bodyList.get(i).length() - 1));
+            }
+            if (bodyList.get(i).charAt(0) == ' ') {
+                bodyList.set(i, bodyList.get(i).substring(1));
             }
         }
 
