@@ -39,7 +39,7 @@ public class MessageService {
             bodyList.add(messageCreate.getBody().substring(startIndex));
         }
 
-        for(int i = 1; i <= messageCreate.getBody().length()/24; i++) {
+        for(int i = 1; i <= messageCreate.getBody().length()/24+1; i++) {
             String tmpString;
             if(messageCreate.getBody().length() - startIndex < 24) {
                 bodyList.add(messageCreate.getBody().substring(startIndex));
