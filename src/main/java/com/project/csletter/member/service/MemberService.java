@@ -245,6 +245,10 @@ public class MemberService {
             throw new MemberException(MemberExceptionType.TOKEN_INVALID);
         }
 
+        if (!jwtService.isTokenValid(requestDto.getAccessToken())) {
+            throw new MemberException(MemberExceptionType.TOKEN_INVALID);
+        }
+
         Member member = memberRepository.findByRefreshToken(requestDto.getRefreshToken()).orElseThrow();
 
         String accessToken = jwtService.createAccessToken(member);
