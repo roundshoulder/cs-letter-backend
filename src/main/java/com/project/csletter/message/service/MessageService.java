@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static java.lang.Math.min;
@@ -117,6 +118,21 @@ public class MessageService {
 
             f.setBody(Collections.singletonList(f.getBody().get(0).length() > 20 ? initialList(f.getBody().get(0)).substring(0, 20) : initialList(f.getBody().get(0))));
             f.setHaveNextMessage(!messageRepository.mainFeedLess(memberToken, f.getMessageId(), pageable).isEmpty());
+
+            if(cursor == 0) {
+                f.setPrevCursor(null);
+            }else {
+                List<Message> messages = messageRepository.prevCursor(memberToken, mainList.get(0).getMessageId(), Pageable.ofSize(7));
+                if (Objects.equals(messages.get(messages.size() - 1).getId(), messageRepository.mainFeed(memberToken, pageable).get(0).getId())) {
+                    f.setPrevCursor(0L);
+                } else {
+                    f.setPrevCursor(messages.get(messages.size() - 1).getId());
+                }
+            }
+
+
+
+            f.setNextCursor(mainList.get(mainList.size()-1).getMessageId());
         });
 
         return mainList;
