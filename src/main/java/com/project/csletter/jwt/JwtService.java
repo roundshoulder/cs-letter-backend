@@ -43,6 +43,7 @@ public class JwtService {
     private final MemberRepository memberRepository;
 
     public String createAccessToken(Member member) {
+
         return JWT.create()
                 .withSubject(ACCESS_TOKEN_SUBJECT)
                 .withSubject(member.getKakaoEmail())
