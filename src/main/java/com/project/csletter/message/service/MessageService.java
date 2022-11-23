@@ -63,6 +63,13 @@ public class MessageService {
             bodyList.set(i, bodyList.get(i).strip());
         }
 
+        for(int i = 0; i < bodyList.size(); i++) {
+            if(bodyList.get(i).isBlank()) {
+                bodyList.remove(i);
+                i = 0;
+            }
+        }
+
         Message message = Message.builder()
                 .body(bodyList)
                 .nickname(messageCreate.getNickname())
