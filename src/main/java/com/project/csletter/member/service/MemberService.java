@@ -1,6 +1,5 @@
 package com.project.csletter.member.service;
 
-import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.csletter.global.utils.SecurityUtil;
@@ -14,7 +13,6 @@ import com.project.csletter.member.exception.MemberExceptionType;
 import com.project.csletter.member.repository.MemberRepository;
 import com.project.csletter.message.domain.Message;
 import com.project.csletter.message.repository.MessageRepository;
-import jdk.jshell.spi.ExecutionControl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,10 +26,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import javax.servlet.ServletException;
-import java.rmi.ServerError;
 import java.util.List;
-import java.util.Optional;
 import java.util.Random;
 
 
