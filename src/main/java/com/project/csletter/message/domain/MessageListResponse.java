@@ -19,6 +19,8 @@ public class MessageListResponse {
     private LocalDateTime time;
     private Boolean isCorrect;
     private Boolean isRead;
+    private Long prevCursor;
+    private Long nextCursor;
 
     @Builder
     public MessageListResponse(Message message) {
