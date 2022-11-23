@@ -1,15 +1,13 @@
 package com.project.csletter.global;
 
-import com.project.csletter.global.utils.DateTimeUtil;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.Column;
-import javax.persistence.EntityListeners;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @EntityListeners(AuditingEntityListener.class)
 @MappedSuperclass
@@ -18,8 +16,19 @@ public abstract class BaseTimeEntity {
 
     @CreatedDate
     @Column(updatable = false)
-    private LocalDateTime createDate = DateTimeUtil.now();
+    private String createDate;
 
     @LastModifiedDate
-    private LocalDateTime lastModifiedDate = DateTimeUtil.now();
+    private String lastModifiedDate;
+
+    @PrePersist
+    public void onPrePersist(){
+        this.createDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd/HH/mm/ss"));
+        this.lastModifiedDate = this.createDate;
+    }
+
+    @PreUpdate
+    public void onPreUpdate(){
+        this.lastModifiedDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd/HH/mm/ss"));
+    }
 }
