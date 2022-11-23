@@ -36,7 +36,7 @@ jwt:
   secret: 12311564213154321312315631123456789123456789123456789000123
 
   access:
-    expiration: 60
+    expiration: 3600
     header: Authorization
 
   refresh:
