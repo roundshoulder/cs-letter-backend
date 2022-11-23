@@ -16,7 +16,7 @@ public class MessageListResponse {
     private String toMemberToken;
     private Long color;
     private Boolean haveNextMessage;
-    private String time;
+    private LocalDateTime time;
     private Boolean isCorrect;
     private Boolean isRead;
 

@@ -14,7 +14,7 @@ public class MessageResponse {
     private String nickname;
     private String toMemberToken;
     private Long color;
-    private String time;
+    private LocalDateTime time;
     private MarkingLastResponse markingResult;
 
     @Builder
