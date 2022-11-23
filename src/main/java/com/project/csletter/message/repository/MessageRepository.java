@@ -15,6 +15,9 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
     @Query(value = "SELECT * FROM message WHERE to_member_token = :sessionId AND message_id < :id ORDER BY message_id DESC", nativeQuery = true)
     List<Message> mainFeedLess(String sessionId, Long id, Pageable pageable);
 
+    @Query(value = "SELECT * FROM message WHERE to_member_token = :sessionId AND message_id > :id ORDER BY message_id ASC", nativeQuery = true)
+    List<Message> prevCursor(String sessionId, Long id, Pageable pageable);
+
     List<Message> findAllByToMemberToken(String memberToken);
 
     Long countAllByToMemberToken(String memberToken);
