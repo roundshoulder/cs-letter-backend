@@ -129,11 +129,12 @@ public class MessageService {
                     f.setPrevCursor(messages.get(messages.size() - 1).getId());
                 }
             }
-
-
-
             f.setNextCursor(mainList.get(mainList.size()-1).getMessageId());
         });
+
+        if(!mainList.get(mainList.size() - 1).getHaveNextMessage()) {
+            mainList.forEach(f -> f.setNextCursor(null));
+        }
 
         return mainList;
     }
