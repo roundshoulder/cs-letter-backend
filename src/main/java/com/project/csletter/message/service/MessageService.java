@@ -132,8 +132,10 @@ public class MessageService {
             f.setNextCursor(mainList.get(mainList.size()-1).getMessageId());
         });
 
-        if(!mainList.get(mainList.size() - 1).getHaveNextMessage()) {
-            mainList.forEach(f -> f.setNextCursor(null));
+        if (mainList.size() > 0) {
+            if(!mainList.get(mainList.size() - 1).getHaveNextMessage()) {
+                mainList.forEach(f -> f.setNextCursor(null));
+            }
         }
 
         return mainList;
