@@ -54,7 +54,7 @@ public class MessageService {
                 }
 
                 bodyList.add(tmpString.substring(0, lastIndex));
-                startIndex = startIndex + tmpString.length()-1;
+                startIndex = startIndex + lastIndex;
             }
         }
 
