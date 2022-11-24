@@ -45,7 +45,7 @@ public class MessageService {
                     bodyList.add(messageCreate.getBody().substring(startIndex));
                     break;
                 }
-                tmpString = messageCreate.getBody().substring(startIndex, startIndex+25);
+                tmpString = messageCreate.getBody().substring(startIndex, startIndex+23);
                 int lastIndex = tmpString.length()-1;
                 if(tmpString.contains(" ")) {
                     while(tmpString.charAt(lastIndex) != ' ') {
