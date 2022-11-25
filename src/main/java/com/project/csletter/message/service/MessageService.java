@@ -36,13 +36,17 @@ public class MessageService {
 
         int startIndex = 0;
 
-        if(messageCreate.getBody().length() - startIndex < 24) {
-            bodyList.add(messageCreate.getBody().substring(startIndex));
+        if(messageCreate.getBody().length() < 24) {
+            String tmpString= messageCreate.getBody();
+            tmpString = tmpString.replaceAll("(\r\n|\r|\n\r|\n)", " ");
+            bodyList.add(tmpString);
         }else {
             for(int i = 1; i <= messageCreate.getBody().length()/24+1; i++) {
                 String tmpString;
                 if(messageCreate.getBody().length() - startIndex < 24) {
-                    bodyList.add(messageCreate.getBody().substring(startIndex));
+                    tmpString = messageCreate.getBody().substring(startIndex);
+                    tmpString = tmpString.replaceAll("(\r\n|\r|\n\r|\n)", " ");
+                    bodyList.add(tmpString);
                     break;
                 }
                 tmpString = messageCreate.getBody().substring(startIndex, startIndex+23);
@@ -65,6 +69,7 @@ public class MessageService {
                         while (tmpString.charAt(lastIndex) != ' ') {
                             lastIndex--;
                         }
+                        lastIndex++;
                     }
                 }
 
