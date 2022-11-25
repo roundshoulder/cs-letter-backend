@@ -46,22 +46,25 @@ public class MessageService {
                     break;
                 }
                 tmpString = messageCreate.getBody().substring(startIndex, startIndex+23);
+                tmpString = tmpString.replaceAll("(\r\n|\r|\n\r)", "\n");
+                tmpString = tmpString.strip();
+
                 int lastIndex = tmpString.length()-1;
 
                 if(tmpString.contains("\n")) {
                     for(int j = 0; j < tmpString.length(); j++) {
                         if(tmpString.charAt(j) == '\n') {
-                            lastIndex = j;
-                            tmpString = tmpString.substring(startIndex, j+1);
+                            lastIndex = j+1;
+                            tmpString = tmpString.substring(startIndex, lastIndex);
                             i--;
                             break;
                         }
                     }
-                }
-
-                if(tmpString.contains(" ")) {
-                    while(tmpString.charAt(lastIndex) != ' ') {
-                        lastIndex--;
+                } else {
+                    if (tmpString.contains(" ")) {
+                        while (tmpString.charAt(lastIndex) != ' ') {
+                            lastIndex--;
+                        }
                     }
                 }
 
