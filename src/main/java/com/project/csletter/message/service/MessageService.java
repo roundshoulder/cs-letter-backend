@@ -55,7 +55,7 @@ public class MessageService {
                     for(int j = 0; j < tmpString.length(); j++) {
                         if(tmpString.charAt(j) == '\n') {
                             lastIndex = j+1;
-                            tmpString = tmpString.substring(startIndex, lastIndex);
+                            tmpString = tmpString.substring(0, lastIndex);
                             i--;
                             break;
                         }
