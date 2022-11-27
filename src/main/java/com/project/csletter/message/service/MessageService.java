@@ -136,6 +136,12 @@ public class MessageService {
                 f.setIsCorrect(f.getBody().containsAll(markingRepository.findByMessageId(f.getMessageId()).orElseThrow().getBody()));
             }
 
+            if (f.getBody().size() > 1) {
+                f.setHaveSecondLine(true);
+            } else {
+                f.setHaveSecondLine(false);
+            }
+
             f.setBody(Collections.singletonList(f.getBody().get(0).length() > 20 ? initialList(f.getBody().get(0)).substring(0, 20) : initialList(f.getBody().get(0))));
             f.setHaveNextMessage(!messageRepository.mainFeedLess(memberToken, f.getMessageId(), pageable).isEmpty());
 
