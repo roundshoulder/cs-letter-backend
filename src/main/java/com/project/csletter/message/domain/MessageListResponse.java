@@ -21,6 +21,7 @@ public class MessageListResponse {
     private Boolean isRead;
     private Long prevCursor;
     private Long nextCursor;
+    private Boolean haveSecondLine;
 
     @Builder
     public MessageListResponse(Message message) {
