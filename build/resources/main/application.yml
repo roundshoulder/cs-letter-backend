@@ -32,6 +32,21 @@ spring:
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
 
+cloud:
+  aws:
+    s3:
+      bucket: file-upload-s3-bucket
+      folder:
+
+    stack:
+      auto: false
+    region:
+      static: ap-northeast-2
+    credentials:
+      access-key: AKIAVYRAAJP22EWXYQFO
+      secret-key: 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
+      instance-profile: true
+
 jwt:
   secret: 12311564213154321312315631123456789123456789123456789000123
 
