@@ -44,7 +44,17 @@ public class Member {
     @Column(name = "member_token")
     private String memberToken;
 
+    private String nickname;
+
     public void updateRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
+    }
+
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void addKakaoProfileImage(String kakaoProfileImg) {
+        this.kakaoProfileImg = kakaoProfileImg;
     }
 }
