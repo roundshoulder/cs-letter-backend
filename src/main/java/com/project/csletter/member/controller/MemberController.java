@@ -10,7 +10,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
+import org.springframework.security.core.authority.mapping.NullAuthoritiesMapper;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -20,6 +29,7 @@ public class MemberController {
 
     private final MemberService memberService;
     private final MemberRepository memberRepository;
+    private GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
 
     @GetMapping("/oauth/token")
     public ResponseEntity getLogin(@RequestParam("code") String code) {
@@ -69,6 +79,11 @@ public class MemberController {
     public TokenResponseDto reIssue(@RequestBody TokenRequestDto tokenRequestDto){
         TokenResponseDto tokenResponseDto = memberService.reIssue(tokenRequestDto);
         return tokenResponseDto;
+    }
+
+    @PatchMapping("/member")
+    public void updateMember(@ModelAttribute MemberUpdate memberUpdate, @RequestPart(required = false) MultipartFile multipartFile) {
+        memberService.updateMember(memberUpdate, multipartFile);
     }
 
 
