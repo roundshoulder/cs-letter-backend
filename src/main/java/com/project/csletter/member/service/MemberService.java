@@ -2,6 +2,7 @@ package com.project.csletter.member.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.csletter.global.service.S3Uploader;
 import com.project.csletter.global.utils.SecurityUtil;
 import com.project.csletter.jwt.JwtService;
 import com.project.csletter.jwt.TokenRequestDto;
@@ -25,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Random;
@@ -39,6 +41,7 @@ public class MemberService {
     private final MessageRepository messageRepository;
     private final MarkingRepository markingRepository;
     private final JwtService jwtService;
+    private final S3Uploader s3Uploader;
 
     @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
     String client_id;
@@ -169,7 +172,9 @@ public class MemberService {
                 .solving(0L)
                 .build();
 
-
+        if(!member.getNickname().isEmpty()) {
+            memberResponse.setKakaoNickname(member.getNickname());
+        }
 
         List<Message> messages = messageRepository.findAllByToMemberToken(member.getMemberToken());
 
@@ -194,8 +199,8 @@ public class MemberService {
         MemberProfile memberProfile = MemberProfile.builder()
                 .userCode(member.getUserCode())
                 .kakaoProfileImg(member.getKakaoProfileImg())
-                .kakaoNickname(member.getKakaoNickname())
                 .kakaoEmail(member.getKakaoEmail())
+                .kakaoNickname(member.getKakaoNickname())
                 .userRole(member.getUserRole())
                 .memberToken(member.getMemberToken())
                 .countMessage(messageRepository.countAllByToMemberToken(member.getMemberToken()))
@@ -203,6 +208,9 @@ public class MemberService {
                 .notRead(messageRepository.countAllByToMemberTokenAndIsReadFalse(member.getMemberToken()))
                 .solving(0L)
                 .build();
+        if(!member.getNickname().isEmpty()) {
+            memberProfile.setKakaoNickname(member.getNickname());
+        }
 
         try {
             String name = SecurityUtil.getLoginUsername();
@@ -230,7 +238,10 @@ public class MemberService {
         Member member = memberRepository.findByMemberToken(memberToken)
                 .orElseThrow();
 
-        return member.getKakaoNickname();
+        if(member.getNickname().isEmpty()) {
+            return member.getKakaoNickname();
+        }
+        return member.getNickname();
     }
 
 
@@ -270,5 +281,14 @@ public class MemberService {
             }
         }
         return newWord.toString();
+    }
+
+    @Transactional
+    public void updateMember(MemberUpdate memberUpdate, MultipartFile multipartFile) {
+        Member member = memberRepository.findByKakaoNickname((SecurityUtil.getLoginUsername())).orElseThrow();
+        member.updateNickname(memberUpdate.getNickname());
+        if(multipartFile != null) {
+            member.addKakaoProfileImage(s3Uploader.getThumbnailPath(s3Uploader.uploadImage(multipartFile)));
+        }
     }
 }
