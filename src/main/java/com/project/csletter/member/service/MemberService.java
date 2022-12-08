@@ -172,7 +172,7 @@ public class MemberService {
                 .solving(0L)
                 .build();
 
-        if(!member.getNickname().isEmpty()) {
+        if(!(member.getNickname() == null)) {
             memberResponse.setKakaoNickname(member.getNickname());
         }
 
@@ -208,7 +208,7 @@ public class MemberService {
                 .notRead(messageRepository.countAllByToMemberTokenAndIsReadFalse(member.getMemberToken()))
                 .solving(0L)
                 .build();
-        if(!member.getNickname().isEmpty()) {
+        if(!(member.getNickname() == null)) {
             memberProfile.setKakaoNickname(member.getNickname());
         }
 
@@ -238,7 +238,7 @@ public class MemberService {
         Member member = memberRepository.findByMemberToken(memberToken)
                 .orElseThrow();
 
-        if(member.getNickname().isEmpty()) {
+        if(member.getNickname() == null) {
             return member.getKakaoNickname();
         }
         return member.getNickname();
