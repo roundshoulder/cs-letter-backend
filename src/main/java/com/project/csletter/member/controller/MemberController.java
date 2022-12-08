@@ -81,7 +81,7 @@ public class MemberController {
         return tokenResponseDto;
     }
 
-    @PatchMapping("/member")
+    @PostMapping("/member")
     public void updateMember(@ModelAttribute MemberUpdate memberUpdate, @RequestPart(required = false) MultipartFile multipartFile) {
         memberService.updateMember(memberUpdate, multipartFile);
     }
